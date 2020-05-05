@@ -37,14 +37,9 @@ export default{
 	methods:{
 		Login(){
 			this.$store.dispatch('login',this.user).then(()=>{
-                this.$router.push('/dashborad')                
+                this.$router.push('/dashboard')                
 			})
 		}
-	},
-    created(){
-        if(this.$store.user.token){
-            console.log(this.$store.user.token)
-        }
-    }
+	}
 }
 </script>
