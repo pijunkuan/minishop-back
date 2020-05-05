@@ -14,9 +14,9 @@ const user = {
 		login({commit},info){
 			return new Promise((resolve,reject)=>{
 				login(info).then(r=>{
-					commit('SET_TOKEN',r.data.body.access_token)
-					setToken(r.data.body.access_token)
-					resolve()
+					commit('SET_TOKEN',r.body.access_token)
+					setToken(r.body.access_token)
+					resolve(r)
 				}).catch(e=>{
 					reject(e)
 				})

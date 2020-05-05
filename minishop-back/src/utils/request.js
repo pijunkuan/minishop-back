@@ -5,9 +5,12 @@
 import axios from 'axios'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import defaultSettings from '@/settings'
+import { Message } from 'element-ui'
+
 
 const service = axios.create({
-	baseURL:'http://test.tvbeu.info/api/'
+	baseURL:defaultSettings.apiURL
 })
 
 service.interceptors.request.use(
@@ -23,8 +26,9 @@ service.interceptors.request.use(
 )
 
 service.interceptors.response.use(
-	response => response,
+	response => response.data,
 	error => {
+		Message.error(error.response.data.message)
 		return Promise.reject(error)
 	}
 )
