@@ -45,4 +45,7 @@ export default{
 .main-content.is-collapse{
     width:calc(100% - 66px);
 }
+.main-content>div{
+    margin:15px;
+}
 </style>

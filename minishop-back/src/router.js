@@ -32,7 +32,7 @@ export const allRoutes = [
 		component: Layout,
 		children:[
 			{ path:'list', name:'ProductList', component: r => require(['./pages/Products/ItemList.vue'],r), meta:{ title:'商品列表', icon:'iconlihe' }, hidden:true },
-			{ path:'edit', name:'ProductItem', component: r => require(['./pages/Products/ItemEdit.vue'],r), meta:{ title:'商品详情', icon:'iconbianji' }, hidden:true }
+			{ path:'edit', name:'ProductItem', component: r => require(['./pages/Products/ItemEdit.vue'],r), meta:{ title:'新增商品', icon:'iconbianji' }, hidden:true }
 		]
 	},
 	{
