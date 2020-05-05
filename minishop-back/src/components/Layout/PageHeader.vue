@@ -1,12 +1,24 @@
 <template>
 <div>
-    <div>
+    <div class="header-item">
         <div><i class="iconfont iconleimupinleifenleileibie2"></i></div>
         <div><i class="iconfont iconleimupinleifenleileibie"></i></div>
     </div>
-    <div></div>
-    <div>
+    <div class="header-item">{{ title }}</div>
+    <div class="header-item">
         {{ $store.getters.username }}
     </div>
 </div>
 </template>
+
+<script>
+export default{
+    data(){
+        return{
+            title:''
+        }
+    },
+    created(){
+    }
+}
+</script>
