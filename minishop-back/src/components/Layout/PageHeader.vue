@@ -74,6 +74,17 @@ export default{
 </style>
 <style>
 .el-submenu .el-menu-item{
-    min-width:165px;
+    min-width:165px!important;
+}
+.is-collapse .el-submenu__title span,.is-collapse .el-menu-item span{
+    display:none;
+}
+.el-submenu__title .iconfont,.el-menu-item .iconfont{
+    font-size:20px;
+    margin-right:6px;
+}
+.el-submenu__title .el-submenu__icon-arrow{
+    right:5px;
+    margin-top:-3px;
 }
 </style>
