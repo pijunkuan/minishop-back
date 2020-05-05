@@ -1,10 +1,10 @@
 <template>
 <div>
 	<el-form ref="login" :model="user" :rules="rules">
-		<el-form-item label="" prop="username">
+		<el-form-item label="用户名" prop="username">
 			<el-input v-model="user.username" placeholder="用户名"></el-input>
 		</el-form-item>
-		<el-form-item label="" prop="password">
+		<el-form-item label="密码" prop="password">
 			<el-input v-model="user.password" placeholder="密码" type="password"></el-input>
 		</el-form-item>
 	</el-form>
@@ -19,7 +19,7 @@ export default{
 	data(){
 		return{
 			user:{
-				username:"",
+                username:"",
 				password:""
 			},
 			rules:{
@@ -36,10 +36,15 @@ export default{
 	},
 	methods:{
 		Login(){
-			this.$store.dispatch('login',this.user).then(r=>{
-				console.log(r)
+			this.$store.dispatch('login',this.user).then(()=>{
+                this.$router.push('/dashborad')                
 			})
 		}
-	}
+	},
+    created(){
+        if(this.$store.user.token){
+            console.log(this.$store.user.token)
+        }
+    }
 }
 </script>

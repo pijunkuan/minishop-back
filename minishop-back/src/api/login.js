@@ -11,7 +11,7 @@ export function login(data){
 
 export function get_user(){
 	return request({
-		url:'',
+		url:'me',
 		method:'get'
 	})
 }
