@@ -7,3 +7,11 @@ export function login(data){
 		data
 	})
 }
+
+
+export function get_user(){
+	return request({
+		url:'',
+		method:'get'
+	})
+}
