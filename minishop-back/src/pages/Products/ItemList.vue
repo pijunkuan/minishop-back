@@ -8,7 +8,7 @@
 	<el-table :data='data' style = "width:100%">
 		<el-table-column prop="img" label="图片">
 			<template slot-scope="scope">
-				<el-image :src="scope.row.img" fit="fit"></el-image>
+				<el-image style="width:100px;height:100px;" :src="scope.row.img" fit="contain"></el-image>
 			</template>
 		</el-table-column>
 		<el-table-column prop="product_title" label="商品名称"></el-table-column>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-	import {products} from '@/api/product'
+	import {productsGet} from '@/api/product'
 
 	export default {
 		data(){
@@ -56,7 +56,7 @@
 		},
 		methods:{
 			getData(){
-				products(this.query).then(r=>{
+				productsGet(this.query).then(r=>{
 					this.data = r.data.body.data
 					this.total = r.data.body.page.total
 				})

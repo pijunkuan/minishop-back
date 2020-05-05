@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function products(data){
+export function productsGet(data){
 	return request({
 		url:'product',
 		method:'get',
