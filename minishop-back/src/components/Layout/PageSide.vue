@@ -38,33 +38,36 @@ export default{
         getMenu(){
             let routes = allRoutes.filter((val)=>{return !val.hidden})
             routes.map(v=>{
-                if(v.children !== undefined && v.children.length === 1){
-                    let item = {
-                        title:v.meta.title,
-                        link:v.children[0].name,
-                        icon:v.meta.icon
+                if(v.children !== undefined){
+                    v.children = v.children.filter((val)=>{ return !val.hidden })
+                    if(v.children.length === 1){
+                        let item = {
+                            title:v.meta.title,
+                            link:v.children[0].name,
+                            icon:v.meta.icon
+                        }
+                        this.menus.push(item)
+                    }else{
+                        let item = {
+                            title:v.meta.title,
+                            icon:v.meta.icon,
+                            children:[]
+                        }
+                        let temp = {}
+                        v.children.map(t=>{
+                            temp['title'] = t.meta.title
+                            temp['icon'] = t.meta.icon
+                            temp['link'] = t.name
+                            item.children.push(temp)
+                            temp = {}
+                        })
+                        this.menus.push(item)
                     }
-                    this.menus.push(item)
-                }else if(v.children !== undefined && v.children.length > 1){
-                    let item = {
-                        title:v.meta.title,
-                        icon:v.meta.icon,
-                        children:[]
-                    }
-                    let temp = {}
-                    v.children.map(t=>{
-                        temp['title'] = t.meta.title
-                        temp['icon'] = t.meta.icon
-                        temp['link'] = t.name
-                        item.children.push(temp)
-                        temp = {}
-                    })
-                    this.menus.push(item)
                 }
             })
         },
         toPage(menu){
-            this.$router.push({ name: menu.link })
+            this.$router.replace({ name: menu.link }).catch(()=>{})
         }
     }
 }
