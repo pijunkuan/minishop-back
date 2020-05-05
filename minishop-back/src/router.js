@@ -41,8 +41,17 @@ export const allRoutes = [
 		meta:{ title:'订单管理', icon:'icondingdan' },
 		component: Layout,
 		children:[
-			{ path:'list', name:'OrderList', component: r => require(['./pages/Products/ItemList.vue'],r), meta:{ title:'订单列表', icon:'iconwenjuan' }, hidden:true },
-			{ path:'detail', name:'OrderDetail', component: r => require(['./pages/Products/ItemEdit.vue'],r), meta:{ title:'订单详情', icon:'icondingdan' }, hidden:true }
+			{ path:'list', name:'OrderList', component: r => require(['./pages/Orders/OrderList.vue'],r), meta:{ title:'订单列表', icon:'iconwenjuan' }, hidden:true },
+			{ path:'detail', name:'OrderDetail', component: r => require(['./pages/Orders/OrderDetail.vue'],r), meta:{ title:'订单详情', icon:'icondingdan' }, hidden:true }
+		]
+	},
+	{
+		path:'/image',
+		hidden:false,
+		meta:{ title:'图片管理', icon:'icondingdan'},
+		component: Layout,
+		children:[
+			{ path:'list', name:'ImageList', component: r => require(['./pages/Images/ImageList.vue'],r), meta:{ title:'图片列表', icon:'iconwenjuan' }, hidden:true },
 		]
 	}
 ]
