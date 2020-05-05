@@ -7,7 +7,7 @@
     <div class="header-item header-item-main">{{ $store.getters.title }}</div>
     <div class="header-item header-item-side">
         <span>{{ $store.getters.username }}</span>
-        <span>退出<i class="iconfont icontuichu1"></i></span>
+        <span @click="toLogout">退出<i class="iconfont icontuichu1"></i></span>
     </div>
 </div>
 </template>
@@ -24,6 +24,9 @@ export default{
             this.menuShow = !this.menuShow
             this.$store.dispatch('toggleSide',boolean)
             this.$emit('click')
+        },
+        toLogout(){
+            this.$store.dispatch('logout')
         }
     }
 }

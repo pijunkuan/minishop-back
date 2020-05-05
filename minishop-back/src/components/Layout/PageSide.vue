@@ -7,11 +7,11 @@
                     <i class="iconfont" :class="menu.icon"></i>
                     <span slot="title">{{ menu.title }}</span>
                 </template>
-                <el-menu-item v-for="(sub,Index) in menu.children" :key="'s'+Index" :index="index + 's'+Index">
+                <el-menu-item v-for="(sub,Index) in menu.children" :key="'s'+Index" :index="index + 's'+Index" @click="toPage(sub)">
                     <span>{{ sub.title }}</span>
                 </el-menu-item>
             </el-submenu>
-            <el-menu-item v-if="menu.children === undefined" :index="'m'+index">
+            <el-menu-item v-if="menu.children === undefined" :index="'m'+index" @click="toPage(menu)">
                 <i class="iconfont" :class="menu.icon"></i>
                 <span>{{ menu.title }}</span>
             </el-menu-item>
@@ -62,7 +62,9 @@ export default{
                     this.menus.push(item)
                 }
             })
-            console.log(this.menus)
+        },
+        toPage(menu){
+            this.$router.push({ name: menu.link })
         }
     }
 }
