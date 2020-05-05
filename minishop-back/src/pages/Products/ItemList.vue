@@ -1,12 +1,17 @@
 <template>
 <div>
+	<div style="margin-top: 15px;">
+		<el-input placeholder="商品名称" v-model="query.name" class="input-with-select">
+			<el-button slot="append" icon="el-icon-search" @click='search'></el-button>
+		</el-input>
+	</div>
 	<el-table :data='data' style = "width:100%">
-		<el-table-column prop="product_title" label="商品名称"></el-table-column>
 		<el-table-column prop="img" label="图片">
 			<template slot-scope="scope">
 				<el-image :src="scope.row.img" fit="fit"></el-image>
 			</template>
 		</el-table-column>
+		<el-table-column prop="product_title" label="商品名称"></el-table-column>
 		<el-table-column prop="price" label="售价"></el-table-column>
 		<el-table-column prop="on_sale" label="是否上架">
 			<template slot-scope='scope'>
@@ -41,6 +46,7 @@
 			return {
 				data:null,
 				query:{
+					name:null,
 					page:1,
 					pageSize:15
 				},
@@ -62,6 +68,10 @@
 			},
 			handleCurrentChange(val){
 				this.query.page = val
+				this.getData()
+			},
+			search(){
+				this.query.page = 1
 				this.getData()
 			}
 		},
