@@ -4,7 +4,7 @@
         <div><i class="iconfont iconleimupinleifenleileibie2"></i></div>
         <div><i class="iconfont iconleimupinleifenleileibie"></i></div>
     </div>
-    <div class="header-item">{{ title }}</div>
+    <div class="header-item">{{ $store.getters.title }}</div>
     <div class="header-item">
         {{ $store.getters.username }}
     </div>
@@ -13,12 +13,5 @@
 
 <script>
 export default{
-    data(){
-        return{
-            title:''
-        }
-    },
-    created(){
-    }
 }
 </script>
