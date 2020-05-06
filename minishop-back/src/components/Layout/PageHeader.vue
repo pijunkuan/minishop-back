@@ -7,7 +7,7 @@
     <div class="header-item header-item-main">{{ $store.getters.title }}</div>
     <div class="header-item header-item-side">
         <span>{{ $store.getters.username }}</span>
-        <span @click="toLogout">退出<i class="iconfont icontuichu1"></i></span>
+        <span @click="toLogout" style="cursor:pointer">退出<i class="iconfont icontuichu1"></i></span>
     </div>
 </div>
 </template>
@@ -26,7 +26,15 @@ export default{
             this.$emit('click')
         },
         toLogout(){
-            this.$store.dispatch('logout')
+            this.$store.dispatch('logout').then(()=>{
+                this.$message.success({
+                    message:'已安全登出',
+                    duration:1000
+                })
+                setTimeout(()=>{
+                    this.$router.push({name:'Login'})
+                },1000)
+            })
         }
     }
 }

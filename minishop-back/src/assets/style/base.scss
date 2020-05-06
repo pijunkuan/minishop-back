@@ -21,3 +21,25 @@ html,body{
 	color:$main-font-color;
 	font-size:$middle-font-size;
 }
+
+.el-message{
+	top:0!important;
+	width:100%;
+	padding:35px!important;
+	background-color:rgba(0,0,0,0.8)!important;
+	border:none!important;
+	border-radius:0!important;
+}
+.el-message i{
+	position:absolute;
+	width:20px;
+	text-align:center;
+	left:50%;
+	margin-left:-150px;
+}
+.el-message p{
+	width:290px;
+	position:absolute;
+	left:50%;
+	margin-left:-120px!important;
+}

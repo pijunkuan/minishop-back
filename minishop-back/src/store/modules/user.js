@@ -44,9 +44,12 @@ const user = {
 			})
 		},
 		logout({commit}){
-			removeToken()
-			removeExtime()
-			commit('SET_TOKEN','')
+			return new Promise((resolve)=>{
+				removeToken()
+				removeExtime()
+				commit('SET_TOKEN','')
+				resolve()
+			})
 		}
 	}
 }
