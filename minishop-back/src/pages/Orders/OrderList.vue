@@ -23,10 +23,16 @@
 		<el-table-column prop="amount" label="订单总价"></el-table-column>
 		<el-table-column prop="status_value" label="状态">
 			<template slot-scope='scope'>
-				<el-tag v-if="scope.row.status === 'pending'" type="warning" effect="dark">{{scope.row.status_value}}</el-tag>
+				<el-tag v-if="scope.row.status === 'pending'" type="warning" >{{scope.row.status_value}}</el-tag>
+				<el-tag v-else-if="scope.row.status === 'processing'" type="primary">{{scope.row.status_value}}</el-tag>
+
 				<el-tag v-else-if="scope.row.status === 'sent'" type="success" effect="dark">{{scope.row.status_value}}</el-tag>
-				<el-tag v-else-if="scope.row.status === 'proccessing'" type="primary" effect="dark">{{scope.row.status_value}}</el-tag>
+				<el-tag v-else-if="scope.row.status === 'partial'" type="success">{{scope.row.status_value}}</el-tag>
 				<el-tag v-else-if="scope.row.status === 'refunding'" type="danger" effect="dark">{{scope.row.status_value}}</el-tag>
+				<el-tag v-else-if="scope.row.status === 'refunded'" type="danger">{{scope.row.status_value}}</el-tag>
+				<el-tag v-else-if="scope.row.status === 'cancel' " type='info'>{{scope.row.status_value}}</el-tag>
+				<el-tag v-else-if="scope.row.status === 'closed' " type='info'>{{scope.row.status_value}}</el-tag>
+				<el-tag v-else-if="scope.row.status === 'success' " type='primary' effect="dark">{{scope.row.status_value}}</el-tag>
 				<el-tag v-else type="info" effect="dark">{{scope.row.status_value}}</el-tag>
 
 			</template>
@@ -34,7 +40,7 @@
 		<el-table-column prop="created_at" label="创建时间"></el-table-column>
 		<el-table-column label="操作">
 			<template slot-scope='scope'>
-				<el-button size="mini" type="primary" @click="toDetail(scope.row.id)">查看</el-button>
+				<el-button size="mini" type="primary" @click="toDetail(scope.row.id)">处理</el-button>
 			</template>
 		</el-table-column>
 	</el-table>
