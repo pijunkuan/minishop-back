@@ -7,3 +7,10 @@ export function get_images(data){
 		params:data
 	})
 }
+
+export function delete_image(id){
+	return request({
+		url:'image/' + id,
+		method:'delete'
+	})
+}
