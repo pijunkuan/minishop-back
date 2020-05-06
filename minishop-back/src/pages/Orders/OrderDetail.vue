@@ -8,11 +8,10 @@
 		<el-button v-if="refund_status ==='refunding'" type="danger" @click="refundOrder('refund_refuse')">拒绝退单</el-button>
 
 	</div>
-	<div class="order-top">
+	<div class="order-top" style="width:calc(100% - 20px)">
 		<el-steps :active="status_active" finish-status="success" simple>
 			<el-step v-for = "(status_process,index) in status_processes" :key="index" :title="status_process.value"></el-step>
 		</el-steps>
-		
 	</div>
 	<div class="order-contain">
 		<div class="order-main">

@@ -1,51 +1,80 @@
 <template>
 <div>
 	<div class="table-header">
-		<el-input placeholder="请输入" v-model="query.value" class="input-with-select">
-		<el-select v-model="query.type" slot="prepend" placeholder="请选择">
-			<el-option label="收件人" value="name"></el-option>
-			<el-option label="订单号" value="no"></el-option>
-			<el-option label="电话" value="mobile"></el-option>
-		</el-select>
-			<el-button slot="append" icon="el-icon-search" @click='search'></el-button>
-		</el-input>
+		<div class="table-header-item">
+			<div>订单状态</div>
+			<el-radio-group v-model="query.status" size="small">
+				<el-radio-button :label="''">全部</el-radio-button>
+				<el-radio-button v-for="(item,index) in status" :key="index" :label="item.type">{{ item.value }}</el-radio-button>
+			</el-radio-group>
+		</div>
+		<div class="table-header-item">
+			<div>搜索</div>
+			<el-input placeholder="请输入" v-model="search" class="input-with-select" size="medium">
+				<el-select v-model="searchType" slot="prepend" placeholder="请选择">
+					<el-option label="收件人" value="name"></el-option>
+					<el-option label="订单号" value="no"></el-option>
+					<el-option label="电话" value="mobile"></el-option>
+				</el-select>
+			</el-input>
+		</div>
+		<div class="table-header-item" style="text-align:center">
+			<el-button @click='reset' size="small">重置</el-button>
+			<el-button type="primary" @click='toSearch' size="small">搜索</el-button>
+		</div>
 	</div>
-	<el-table
-		ref="orderTable"
-		:data='orderData'
-		v-loading='loading'
-		header-row-class-name="table-header-row"
-		border>
-		<el-table-column prop="no" label="订单编号" width="130px" align="center"></el-table-column>
-		<el-table-column prop="name" label="收件人"></el-table-column>
-		<el-table-column prop="mobile" label="电话"></el-table-column>
-		<el-table-column prop="address" label="地址"></el-table-column>
-		<el-table-column prop="amount" label="订单总价"></el-table-column>
-		<el-table-column prop="status_value" label="状态">
-			<template slot-scope='scope'>
-				<el-tag v-if="scope.row.status === 'pending'" type="warning" >{{scope.row.status_value}}</el-tag>
-				<el-tag v-else-if="scope.row.status === 'processing'" type="primary">{{scope.row.status_value}}</el-tag>
-
-				<el-tag v-else-if="scope.row.status === 'sent'" type="success" effect="dark">{{scope.row.status_value}}</el-tag>
-				<el-tag v-else-if="scope.row.status === 'partial'" type="success">{{scope.row.status_value}}</el-tag>
-				<el-tag v-else-if="scope.row.status === 'refunding'" type="danger" effect="dark">{{scope.row.status_value}}</el-tag>
-				<el-tag v-else-if="scope.row.status === 'refunded'" type="danger">{{scope.row.status_value}}</el-tag>
-				<el-tag v-else-if="scope.row.status === 'cancel' " type='info'>{{scope.row.status_value}}</el-tag>
-				<el-tag v-else-if="scope.row.status === 'closed' " type='info'>{{scope.row.status_value}}</el-tag>
-				<el-tag v-else-if="scope.row.status === 'success' " type='primary' effect="dark">{{scope.row.status_value}}</el-tag>
-				<el-tag v-else type="info" effect="dark">{{scope.row.status_value}}</el-tag>
-
-			</template>
-		</el-table-column>
-		<el-table-column prop="created_at" label="创建时间"></el-table-column>
-		<el-table-column label="操作">
-			<template slot-scope='scope'>
-				<el-button size="mini" type="primary" @click="toDetail(scope.row.id)">处理</el-button>
-			</template>
-		</el-table-column>
-	</el-table>
+	<div v-loading="loading" style="min-height:400px">
+		<div v-for="(order,index) in orderData" :key="index" class="order-item">
+			<div class="order-header">
+				<strong style="margin-right:10px;" @click="toDetail(order)">{{ order.no }}</strong>
+				<el-tag v-if="order.status === 'pending'" type="warning" >{{order.status_value}}</el-tag>
+				<el-tag v-else-if="order.status === 'processing'" type="primary">{{order.status_value}}</el-tag>
+				<el-tag v-else-if="order.status === 'sent'" type="success" effect="dark">{{order.status_value}}</el-tag>
+				<el-tag v-else-if="order.status === 'partial'" type="success">{{order.status_value}}</el-tag>
+				<el-tag v-else-if="order.status === 'refunding'" type="danger" effect="dark">{{order.status_value}}</el-tag>
+				<el-tag v-else-if="order.status === 'refunded'" type="danger">{{order.status_value}}</el-tag>
+				<el-tag v-else-if="order.status === 'cancel' " type='info'>{{order.status_value}}</el-tag>
+				<el-tag v-else-if="order.status === 'closed' " type='info'>{{order.status_value}}</el-tag>
+				<el-tag v-else-if="order.status === 'success' " type='primary' effect="dark">{{order.status_value}}</el-tag>
+				<el-tag v-else type="info" effect="dark">{{order.status_value}}</el-tag>
+				<span style="margin-left:10px">{{ order.created_at }}</span>
+			</div>
+			<div class="order-content-main">
+				<div class="order-content-main-item" style="width:calc(100% - 202px)">
+					<div class="order-content-main-item__address">
+						<div class="order-content-main-item__title" style="width:70px">收件信息</div>
+						<div style="width:calc(100% - 70px)">
+							<div>{{ order.name }} | {{ order.mobile }}</div>
+							<div>{{ order.address }}</div>
+						</div>
+					</div>
+					<div class="order-content-main-item__address">
+						<div class="order-content-main-item__title" style="width:70px">买家留言</div>
+						<div style="width:calc(100% - 70px)">{{ order.remark }}</div>
+					</div>
+				</div>
+				<div class="order-content-main-item" style="width:100px">
+					<div class="order-content-main-item__title">支付方式</div>
+					<div>{{ order.payment }}</div>
+				</div>
+				<div class="order-content-main-item" style="width:100px">
+					<div class="order-content-main-item__title">订单金额</div>
+					<div><strong>¥ {{ order.amount }}</strong></div>
+				</div>
+			</div>
+			<div v-for="(item,Index) in order.items" :key="Index" class="order-content-items">
+				<el-image style="width:80px;height:80px" :src="item.img_url" fit="scale-down"></el-image>
+				<div style="width:calc(100% - 310px);margin:0 10px">
+					<div>{{ item.product_title }}</div>
+					<div>{{ item.variant_title }}</div>
+				</div>
+				<div style="width:100px;margin-right:10px"><span>¥ {{ item.price }}</span></div>
+				<div style="width:100px">x {{ item.quantity }}</div>
+			</div>
+		</div>
+	</div>
 	<el-pagination
-		style="text-align:center;margin-top:40px"
+		style="text-align:center;margin:40px 0"
 		@size-change="handleSizeChange"
 		@current-change="handleCurrentChange"
 		:current-page="query.page"
@@ -66,12 +95,22 @@
 				orderData:[],
 				loading:false,
 				query:{
-					type:"",
-					value:"",
+					status:'',
+					no:'',
+					name:'',
+					mobile:'',
 					page:1,
 					pageSize:15
 				},
-				total:0
+				total:0,
+				status:[
+					{ type:'pending', value:'待支付'},
+					{ type:'processing', value:'待发货'},
+					{ type:'sent', value:'已发货'},
+					{ type:'refunding', value:'退款中'}
+				],
+				searchType:'name',
+				search:''
 			}
 		},
 		methods:{
@@ -81,6 +120,8 @@
 					this.orderData = r.data.body.data
 					this.total = r.data.body.page.total
 					this.loading=false
+				}).catch(()=>{
+					this.loading = false
 				})
 			},
 			handleSizeChange(val){
@@ -92,17 +133,21 @@
 				this.query.page = val
 				this.getData()
 			},
-			search(){
+			toSearch(){
 				this.query.page = 1
+				this.query[this.searchType] = this.search
+				console.log(this.query)
 				this.getData()
 			},
-			toDetail(id){
-				this.$router.push({
-					name:'OrderDetail',
-					query:{
-						id:id
-					}
-				})
+			reset(){
+				this.query.status = []
+				this.query.page = 1
+				this.query.value = ''
+				this.query.type = ''
+				this.getData()
+			},
+			toDetail(order){
+				this.$router.push({name:'OrderDetail',query:{id:order.id}})
 			}
 		},
 		created(){
@@ -110,3 +155,89 @@
 		}
 	}
 </script>
+
+<style lang="scss">
+@import '@/assets/style/base.scss';
+.table-header .el-input--suffix input{
+	width:100px;
+}
+.table-header .el-radio-group .el-radio-button{
+	margin-right:10px;
+	margin-bottom:10px;
+}
+.table-header .el-radio-group .el-radio-button__inner{
+	border-left:1px solid #DCDFE6;
+	border-radius:4px;
+}
+.table-header .el-radio-button__orig-radio:checked+.el-radio-button__inner{
+	border-left:none;
+}
+</style>
+<style lang="scss" scoped>
+@import '@/assets/style/base.scss';
+.table-header{
+	margin-bottom:20px;
+	background-color:#fff;
+	border:1px solid $line-color;
+	border-radius:5px;
+}
+.table-header-item{
+	margin:10px;
+}
+.table-header-item>div:first-child{
+	color:$sub-font-color;
+	margin-bottom:10px;
+}
+
+.order-item{
+	border:1px solid $line-color;
+	box-shadow:0 0 5px 3px rgba(0,0,0,0.08);
+	border-radius:5px;
+	margin:10px 0 15px;
+	padding-bottom:10px;
+}
+.order-header{
+	background-color:$background-color;
+	line-height:50px;
+	padding:0 10px;
+	border-radius:5px 5px 0 0;
+}
+.order-header strong{
+	text-decoration:underline;
+	color:$main-color;
+	cursor:pointer;
+}
+.order-header strong:hover{
+	color:$main-color * 1.2;
+}
+
+.order-content-main{
+	margin:10px;
+	padding-bottom:10px;
+	border-bottom:1px dotted $line-color;
+}
+.order-content-main-item{
+	display:inline-block;
+	vertical-align:top;
+}
+.order-content-main-item:last-child{
+	text-align:right;
+}
+.order-content-main-item__address>div{
+	display:inline-block;
+	vertical-align:top;
+}
+.order-content-main-item__title{
+	color:$other-font-color;
+}
+.order-content-items{
+	margin:10px;
+}
+.order-content-items>div{
+	display:inline-block;
+	vertical-align:middle;
+}
+.order-content-items>div span{
+	color:$error-color;
+}
+</style>
