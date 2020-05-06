@@ -1,6 +1,6 @@
 import request from '../utils/request'
 
-export function imagesGet(data){
+export function get_images(data){
 	return request({
 		url:'image',
 		method:'get',

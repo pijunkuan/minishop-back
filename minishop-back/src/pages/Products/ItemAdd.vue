@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="product-page-title">
-        <el-button size="small" @click="$router.go(-1)">返回</el-button>
+        <el-button size="small"  @click="$router.go(-1)">返回</el-button>
         <span class="page-item-title">{{ item.product.product_title }}</span>
         <el-button size="small" type="primary" style="float:right" @click="confirmChange">保存</el-button>
     </div>
@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { get_product, edit_product } from '@/api/product'
+import { create_product } from '@/api/product'
 import { get_categories } from '@/api/category'
 import ImageDialog from '@/components/ImageDialog'
 import Tinymce from '@/components/Tinymce'
@@ -133,7 +133,9 @@ export default{
     data(){
         return{
             item:{
-                product:{},
+                product:{
+                    on_sale:0
+                },
                 images:[],
                 variants:[
                     { variant_title:null, variant_code:null, quantity:null, weight:null, price:null, ori_price:null }
@@ -150,19 +152,7 @@ export default{
             selectTypes:[]
         }
     },
-    created(){
-        if(this.$route.query.id !== undefined) this.getItem()
-    },
     methods:{
-        getItem(){
-            this.$loading()
-            get_product(this.$route.query.id).then(r=>{
-                this.item = r.data.body
-                this.$loading().close()
-            }).catch(()=>{
-                this.$loading().close()
-            })
-        },
         cateDelete(index){
             this.item.categories.splice(index,1)
         },
@@ -297,14 +287,14 @@ export default{
             let images = []
             this.item.images.map(v=>{
                 images.push({
-                    image_id:v.id !== undefined ? v.id : v.image_id,
+                    image_id:v.id,
                     sort:v.sort
                 })
             })
             this.item.images = images
-            edit_product(this.item,this.$route.query.id).then(()=>{
-                this.$message.success('商品修改成功')
-                this.getItem()
+            create_product(this.item).then(()=>{
+                this.$message.success('商品创建成功')
+                this.$router.push({name:'ProductList'})
             }).catch(e=>{
                 this.$message.warning(e.response.data.message)
             })

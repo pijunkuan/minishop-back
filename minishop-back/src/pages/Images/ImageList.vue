@@ -10,7 +10,7 @@
 </template>
 
 <script>
-	import {imagesGet} from "@/api/image"
+	import { get_images } from "@/api/image"
 	export default {
 		data(){
 			return {
@@ -23,7 +23,7 @@
 		},
 		methods:{
 			getData(){
-				imagesGet(this.query).then(r=>{
+				get_images(this.query).then(r=>{
 					this.images = r.data.body.data
 					console.log(this.images)
 				})

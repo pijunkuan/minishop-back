@@ -43,3 +43,10 @@ html,body{
 	left:50%;
 	margin-left:-120px!important;
 }
+
+.loading-placeholder{
+	height:200px;
+	color:$disabled-color;
+	text-align:center;
+	line-height:200px;
+}

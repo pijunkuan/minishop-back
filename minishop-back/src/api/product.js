@@ -15,6 +15,13 @@ export function get_product(id){
 	})
 }
 
+export function create_product(data){
+	return request({
+		url:'product',
+		method:'post',
+		data
+	})
+}
 
 export function edit_product(data,id){
 	return request({

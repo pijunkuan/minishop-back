@@ -6,7 +6,7 @@
 		</el-input>
 		<div class="table-header-button">
 			<el-button type="primary" size="small" @click="visibleGroup">批量上下架</el-button>
-			<el-button type="primary" size="small">批量删除</el-button>
+			<el-button type="primary" size="small" @click="deleteGroup">批量删除</el-button>
 		</div>
 	</div>
 	<el-table
@@ -22,7 +22,9 @@
 				<el-image style="width:100px;height:100px;" :src="scope.row.img" fit="cover"></el-image>
 			</template>
 		</el-table-column>
-		<el-table-column prop="product_title" label="商品名称"></el-table-column>
+		<el-table-column label="商品名称">
+			<div slot-scope="scope" style="cursor:pointer" @click="toItem(scope.row)">{{ scope.row.product_title }}</div>
+		</el-table-column>
 		<el-table-column prop="price" label="售价" width="120px"></el-table-column>
 		<el-table-column prop="on_sale" label="上架" width="70px">
 			<template slot-scope='scope'>
@@ -72,7 +74,8 @@
 				loading:false,
 				progressShow:false,
 				progressTitle:'',
-				index:0
+				index:0,
+				error:0
 			}
 		},
 		created(){
@@ -105,6 +108,9 @@
 			handleSelect(val){
 				this.selected = val
 			},
+			toItem(row){
+				this.$router.push({name:'ProductItem',query:{id:row.id}})
+			},
 			toEdit(row){
 				this.$router.push({name:'ProductItem',query:{id:row.id}})
 			},
@@ -127,6 +133,7 @@
 				this.progressShow = true
 				this.progressTitle = '批量上下架'
 				this.index = 0
+				this.error = 0
 				this.confirmVisible()
 			},
 			confirmVisible(){
@@ -138,21 +145,79 @@
 						this.selected = []
 						this.$refs.itemTable.clearSelection()
 						this.getData()
-						return
+						if(this.error !== 0){
+							this.$message.warning({
+								message: this.error + '个商品未能成功修改，请稍后重试',
+								duration:2000
+							})
+						}else{
+							this.$message.success('已成功修改')
+						}
 					},1000)
+					return
 				}
 				let _item = this.selected[this.index]
 				let _data = {
 					product:{
-						product_on_sale: _item.on_sale ? 0 : 1
+						on_sale: _item.on_sale ? 0 : 1
 					}
 				}
 				edit_product(_data,_item.id).then(()=>{
 					this.index += 1
-					this.confirmVisible()
+					setTimeout(()=>{
+						this.confirmVisible()
+					},100)
 				}).catch(()=>{
 					this.index += 1
-					this.confirmVisible()
+					this.error += 1
+					setTimeout(()=>{
+						this.confirmVisible()
+					},100)
+				})
+			},
+			deleteGroup(){
+				if(this.selected.length === 0){
+					this.$message.warning('请先选择商品')
+					return
+				}
+				this.progressShow = true
+				this.progressTitle = '批量删除'
+				this.index = 0
+				this.error = 0
+				this.confirmDelete()
+			},
+			confirmDelete(){
+				if(this.index === this.selected.length){
+					setTimeout(()=>{
+						this.progressShow = false
+						this.progressTitle = ''
+						this.index = 0
+						this.selected = []
+						this.$refs.itemTable.clearSelection()
+						this.getData()
+						if(this.error !== 0){
+							this.$message.warning({
+								message: this.error + '个商品未能成功删除，请稍后重试',
+								duration:2000
+							})
+						}else{
+							this.$message.success('已成功删除')
+						}
+					},1000)
+					return
+				}
+				let _item = this.selected[this.index]
+				delete_product(_item.id).then(()=>{
+					this.index += 1
+					setTimeout(()=>{
+						this.confirmDelete()
+					},100)
+				}).catch(()=>{
+					this.index += 1
+					this.error += 1
+					setTimeout(()=>{
+						this.confirmDelete()
+					},100)
 				})
 			}
 		}
