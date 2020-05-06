@@ -5,7 +5,7 @@
 			<el-button slot="append" icon="el-icon-search" @click='search'></el-button>
 		</el-input>
 		<div class="table-header-button">
-			<el-button type="primary" size="small">批量上下架</el-button>
+			<el-button type="primary" size="small" @click="visibleGroup">批量上下架</el-button>
 			<el-button type="primary" size="small">批量删除</el-button>
 		</div>
 	</div>
@@ -23,14 +23,14 @@
 			</template>
 		</el-table-column>
 		<el-table-column prop="product_title" label="商品名称"></el-table-column>
-		<el-table-column prop="price" label="售价"></el-table-column>
-		<el-table-column prop="on_sale" label="上架">
+		<el-table-column prop="price" label="售价" width="120px"></el-table-column>
+		<el-table-column prop="on_sale" label="上架" width="70px">
 			<template slot-scope='scope'>
 				<el-tag v-if="scope.row.on_sale" type="success">上架</el-tag>
 				<el-tag v-else type="info">下架</el-tag>
 			</template>
 		</el-table-column>
-		<el-table-column label="操作">
+		<el-table-column label="操作" width="145px">
 			<template slot-scope="scope">
 				<el-button size="mini" type="primary" @click="toEdit(scope.row)">编辑</el-button>
 				<el-button size="mini" type="danger" @click="toDelete(scope.row)">删除</el-button>
@@ -47,13 +47,17 @@
 		layout="total, sizes, prev, pager, next, jumper"
 		:total="total">
     </el-pagination>
+    <progress-bar :Visible="progressShow" :Title="progressTitle" :Index="index" :Total="selected.length"></progress-bar>
 </div>
 </template>
 
 <script>
-	import { get_products, delete_product } from '@/api/product'
-
+	import { get_products, delete_product, edit_product } from '@/api/product'
+	import ProgressBar from '@/components/ProgressBar'
 	export default {
+		components:{
+			ProgressBar
+		},
 		data(){
 			return {
 				data:null,
@@ -65,7 +69,10 @@
 				name:"",
 				total:0,
 				selected:[],
-				loading:false
+				loading:false,
+				progressShow:false,
+				progressTitle:'',
+				index:0
 			}
 		},
 		created(){
@@ -111,6 +118,42 @@
 						this.getData()
 					}).catch(()=>{})
 				}).catch(()=>{})
+			},
+			visibleGroup(){
+				if (this.selected.length === 0) {
+					this.$message.warning('请先选择商品')
+					return
+				}
+				this.progressShow = true
+				this.progressTitle = '批量上下架'
+				this.index = 0
+				this.confirmVisible()
+			},
+			confirmVisible(){
+				if(this.index === this.selected.length){
+					setTimeout(()=>{
+						this.progressShow = false
+						this.progressTitle = ''
+						this.index = 0
+						this.selected = []
+						this.$refs.itemTable.clearSelection()
+						this.getData()
+						return
+					},1000)
+				}
+				let _item = this.selected[this.index]
+				let _data = {
+					product:{
+						product_on_sale: _item.on_sale ? 0 : 1
+					}
+				}
+				edit_product(_data,_item.id).then(()=>{
+					this.index += 1
+					this.confirmVisible()
+				}).catch(()=>{
+					this.index += 1
+					this.confirmVisible()
+				})
 			}
 		}
 	}

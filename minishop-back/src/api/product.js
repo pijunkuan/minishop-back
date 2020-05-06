@@ -8,6 +8,23 @@ export function get_products(data){
 	})
 }
 
+export function get_product(id){
+	return request({
+		url:'product/' + id,
+		method:'get'
+	})
+}
+
+
+export function edit_product(data,id){
+	return request({
+		url:'product/' + id,
+		method:'put',
+		data
+	})
+}
+
+
 export function delete_product(id){
 	return request({
 		url:'product/' + id,
