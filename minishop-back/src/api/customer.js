@@ -7,3 +7,11 @@ export function get_customer(data){
 		params:data
 	})
 }
+
+export function update_customer(id,data){
+	return request({
+		url:'customer/'+ id,
+		method:"put",
+		data
+	})
+}
