@@ -3,41 +3,47 @@
 	<div class="dashboard-contain">
 		<div class="dashboard-1">
 			<div class="dashboard-title">
-				经营数据
+				<strong>经营数据</strong>
 			</div>
 			<div class="dashboard-1-data">
 				<div>
-					<div>{{order.processing_count}}</div>
-					<div>待配送订单</div>
-					<div><el-button type="text">查看</el-button></div>
+					<div class="data-card-title-1"><strong style="color:#E6A23C">{{order.processing_count}}</strong></div>
+					<div class="data-card-title-2">待配送订单</div>
+					<div class="data-card-title-3"><span style="color:#409EFF;cursor: pointer;">查看</span></div>
 				</div>
 				<div>
-					<div>{{order.day_new_order_suc_amount}}</div>
-					<div>今日总金额</div>
-					<div>昨日订单金额:{{order.yesterday_order_suc_amount}}</div>
+					<div class="data-card-title-1">¥ {{order.day_new_order_suc_amount}}</div>
+					<div class="data-card-title-2">今日总金额</div>
+					<div class="data-card-title-3">昨日订单金额: <strong>{{order.yesterday_order_suc_amount}}</strong></div>
 				</div>
 				<div>
-					<div>{{order.day_new_order_count}}</div>
-					<div>今日订单数</div>
-					<div>昨日订单数:{{order.yesterday_order_count}}</div>
+					<div class="data-card-title-1">{{order.day_new_order_count}}</div>
+					<div class="data-card-title-2">今日订单数</div>
+					<div class="data-card-title-3">昨日订单数: <strong>{{order.yesterday_order_count}}</strong></div>
 				</div>
 				<div>
-					<div>{{customer.today_customer_count}}</div>
-					<div>今日新增顾客</div>
-					<div>昨日增加顾客:{{customer.yesterday_customer_count}}</div>
+					<div class="data-card-title-1">{{customer.today_customer_count}}</div>
+					<div class="data-card-title-2">今日新增顾客</div>
+					<div class="data-card-title-3">昨日增加顾客: <strong>{{customer.yesterday_customer_count}}</strong></div>
 				</div>
 				<div>
-					<div>{{order.refunding_count}}</div>
-					<div>退款中</div>
-					<div><el-button type="text">查看</el-button></div>
+					<div class="data-card-title-1">{{order.refunding_count}}</div>
+					<div class="data-card-title-2">退款中</div>
+					<div class="data-card-title-3"><span style="color:#409EFF;cursor: pointer;">查看</span></div>
 				</div>
 			</div>
 		</div>
 		<div class="dashboard-2">
 			<div class="image-info">
+				<div class="dashboard-title">
+					<strong>图片空间资源</strong>
+				</div>
 				图片资源，占位
 			</div>
 			<div class="order-line">
+				<div class="dashboard-title">
+					<strong>实时订单金额</strong>
+				</div>
 				订单曲线图，占位
 			</div>
 		</div>
@@ -144,24 +150,40 @@ export default {
 }
 .ad-contain {
 	display: inline-block;
-	width: 19%;
+	width: 16%;
 	height:550px;
 	vertical-align: top;
-	background-color: #f9f;
+	padding:5px;
+	border: 1px solid $line-color;
 }
 .dashboard-1 {
 	margin-top: 10px;
 	width: 95%;
 	height: 200px;
-	border-radius: 15px;
 }
 .dashboard-title{
-	
-	height:40px;
-	line-height: 40px;
+	height:30px;
+	line-height: 20px;
 	padding:10px 0 0 15px;
 	border-bottom:1px solid $line-color;
 	margin-bottom: 15px;
+	font-size: $large-font-size;
+}
+.data-card-title-1{
+	font-size: $large-font-size;
+	color:$main-font-color;
+	margin-bottom: 8px;
+}
+.data-card-title-2{
+	font-size: $middle-font-size;
+	color:$sub-font-color;
+	padding-bottom:5px;
+	margin-bottom: 5px;
+	border-bottom: 1px solid $line-color;
+}
+.data-card-title-3{
+	font-size: $small-font-size;
+	color:$other-font-color;
 }
 .dashboard-1-data {
 	text-align: center;
@@ -169,7 +191,7 @@ export default {
 .dashboard-1 .dashboard-1-data>div {
 	display: inline-block;
 	width: calc(20% - 40px);
-	height:80px;
+	min-height:80px;
 	margin-right: 15px;
 	padding: 10px;
 	border: 1px solid $line-color;
@@ -184,17 +206,17 @@ export default {
 }
 
 .dashboard-2 .image-info {
-	background-color: #0f0;
 	width: 30%;
 	height:300px;
 	margin-right:15px;
 	padding:10px;
+	vertical-align: top;
 }
 
 .dashboard-2 .order-line {
-	background-color: #ff2;
-	width: calc(60% - 20px);
+	width: 60%;
 	height:300px;
 	padding: 10px;
+	vertical-align: top;
 }
 </style>
