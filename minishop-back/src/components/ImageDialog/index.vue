@@ -1,5 +1,5 @@
 <template>
-<el-dialog :visible="Visible" title="选择商品图片" :before-close="close" width="590px">
+<el-dialog :visible="Visible" title="选择图片" :before-close="close" width="590px">
     <div style="margin-bottom:20px">
         <el-upload class="avatar-uploader upload-btn"
             :headers="{'Authorization': 'Bearer ' + $store.getters.token}"
@@ -15,7 +15,7 @@
         <div v-if="loading" class="loading-placeholder">加载中...</div>
         <div v-if="!loading && images.length === 0" class="loading-placeholder">暂无图片</div>
         <div v-if="!loading && images.length !== 0" style="position:relative">
-            <el-checkbox v-for="(image,index) in images" :key="index" :checked="image.isCheck" @change="selectImage(image)" class="image-checkbox">
+            <el-checkbox v-for="(image,index) in images" :key="index" :value="selectId.indexOf(image.id) !== -1" @change="selectImage(image)" class="image-checkbox">
                 <el-image :src="image.url" style="width:150px;height:150px;" fit="scale-down"></el-image>
             </el-checkbox>
         </div>
@@ -40,6 +40,7 @@ import { get_images } from '@//api/image'
 export default{
     props:{
         Visible:Boolean,
+        Type:String
     },
     data(){
         return{
@@ -86,6 +87,10 @@ export default{
             this.getImages()
         },
         selectImage(image){
+            if(this.Type === 'mono'){
+                this.selectMono(image)
+                return
+            }
             image.isCheck = !image.isCheck
             let _index = this.selectId.indexOf(image.id)
             if(image.isCheck && _index === -1){
@@ -96,6 +101,16 @@ export default{
                 this.selectId.splice(_index,1)
                 this.selectItem.splice(_index,1)
             }
+        },
+        selectMono(image){
+            image.isCheck = !image.isCheck
+            this.images.map(v=>{
+                v.isCheck = false
+            })
+            this.selectId = []
+            this.selectId.push(image.id)
+            this.selectItem = []
+            this.selectItem.push(image)
         },
         close(){
             this.images = []

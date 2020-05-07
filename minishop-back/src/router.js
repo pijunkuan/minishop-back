@@ -63,6 +63,16 @@ export const allRoutes = [
 		children:[
 			{ path:'list', name:'ImageList', component: r => require(['./pages/Images/ImageList.vue'],r), meta:{ title:'图片列表', icon:'icontupian1' }, hidden:false },
 		]
+	},
+	{
+		path:'/settings',
+		hidden:false,
+		meta:{ title:'网站设置', icon:'iconshezhi'},
+		component: Layout,
+		children:[
+			{ path:'theme', name:'SetTheme', component: r => require(['./pages/Setting/SetTheme.vue'],r), meta:{ title:'主题设置', icon:'icontupian1' }, hidden:false },
+			{ path:'shipment', name:'SetShip', component: r => require(['./pages/Setting/SetShip.vue'],r), meta:{ title:'物流设置', icon:'icontupian1' }, hidden:false },
+		]
 	}
 ]
 

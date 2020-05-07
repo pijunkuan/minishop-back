@@ -208,22 +208,16 @@ export default{
             this.currentType = []
         },
         imgFront(image,index){
-            if(image.sort === 0) return
-            const current_sort = image.sort
-            const prev_sort = image.sort - 1
-            image.sort = prev_sort
-            this.item.images[index - 1].sort = current_sort
-            this.item.images[index] = this.item.images[index - 1]
-            this.item.images[index - 1] = image
+            if(image.sort === 1) return
+            image.sort -= 1
+            this.item.images[index - 1].sort += 1
+            this.item.images[index] = this.item.images.splice(index - 1, 1, this.item.images[index])[0]
         },
         imgBack(image,index){
-            if(image.sort === (this.item.images.length - 1)) return
-            const current_sort = image.sort
-            const next_sort = image.sort + 1
-            image.sort = next_sort
-            this.item.images[index + 1].sort = current_sort
-            this.item.images[index] = this.item.images[index + 1]
-            this.item.images[index + 1] = image
+            if(image.sort === this.item.images.length) return
+            image.sort += 1
+            this.item.images[index + 1].sort -= 1
+            this.item.images[index] = this.item.images.splice(index + 1, 1, this.item.images[index])[0]
         },
         imgDelete(index){
             this.item.images.splice(index,1)
