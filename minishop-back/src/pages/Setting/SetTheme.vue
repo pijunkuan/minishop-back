@@ -15,7 +15,7 @@
     <div class="set-module">
         <div class="set-module-title">
             <span style="margin-right:20px">广告图设置</span>
-            <el-button type="primary" size="mini">保存</el-button>
+            <el-button type="primary" size="mini" @click="changeTemplate('banner')">保存</el-button>
         </div>
         <div>
             <div class="module-template"></div>
@@ -54,13 +54,24 @@
         <div>
             <div class="module-template"></div>
             <div class="module-content" v-loading="t_loading">
-                <div v-for="(type,index) in types" :key="index">
-                    <el-image :src="type.img" style="width:40px;height:40px"></el-image>
-                    <el-input v-model="type.title"></el-input>
-                    <el-input v-model="type.link"></el-input>
-                    <div>
-                        <span><i class="iconfont iconxiangshang"></i></span>
-                        <span><i class="iconfont iconxiangxia"></i></span>
+                <div class="module-content-title">
+                    <div style="width:50px">图片</div>
+                    <div style="width:80px;margin:0 5px;">名称</div>
+                    <div style="width:calc(100% - 210px);margin:0 5px;">链接</div>
+                    <div style="width:60px">操作</div>
+                </div>
+                <div v-for="(type,index) in types" :key="index" class="module-content-content">
+                    <div class="module-content-image" style="width:50px;position:relative">
+                        <div class="image-cover-button" style="line-height:50px;height:50px;width:50px">
+                            <el-button type="text" size="small" @click="changeImage('type',index)">选择</el-button>
+                        </div>
+                        <el-image :src="type.img" style="width:50px;height:50px"></el-image>
+                    </div>
+                    <el-input v-model="type.title" style="width:80px;margin:0 5px;"></el-input>
+                    <el-input v-model="type.link" style="width:calc(100% - 210px);margin:0 5px;"></el-input>
+                    <div class="module-content-button" style="width:60px">
+                        <span @click="toFront('type',index)"><i class="iconfont iconxiangshang"></i></span>
+                        <span @click="toBack('type',index)"><i class="iconfont iconxiangxia"></i></span>
                     </div>
                 </div>
             </div>
@@ -74,7 +85,7 @@
         <div>
             <div class="module-template"></div>
             <div class="module-content" v-loading="t_loading">
-                <el-input v-model="message"></el-input>
+                <el-input v-model="message" placeholder="请输入主页通知的消息"></el-input>
             </div>
         </div>
     </div>
@@ -86,10 +97,11 @@
         <div>
             <div class="module-template"></div>
             <div class="module-content" v-loading="t_loading">
-                <div>活动结束时间</div>
+                <div style="margin-bottom:10px">活动结束时间</div>
                 <el-date-picker v-model="limit.endTime" type="datetime"></el-date-picker>
-                <div>活动商品</div>
+                <div style="margin:10px 0">活动商品</div>
                 <div>
+                    <div v-if="limit.items.length === 0 && !t_loading" style="margin-bottom:10px">暂无商品</div>
                     <div v-for="(item,index) in limit.items" :key="index">
                         <el-image :src="item.img_src" style="width:40px;height:40px"></el-image>
                         <el-input v-model="item.title"></el-input>
@@ -103,7 +115,7 @@
                         </div>
                     </div>
                     <div>
-                        <el-button type="primary" size="mini">新增商品</el-button>
+                        <el-button type="primary" size="mini" @click="addItem('limit')">新增商品</el-button>
                     </div>
                 </div>
             </div>
@@ -156,6 +168,7 @@
         </div>
     </div>
     <image-dialog :Visible="imageShow" Type="mono" @close="imageShow = false" @confirm="confirmImage"></image-dialog>
+    <item-dialog :Visible="addShow" @close="addShow = false"></item-dialog>
 </div>
 </template>
 
@@ -163,9 +176,11 @@
 import { get_theme, change_theme } from '@/api/theme'
 import { get_template, change_template } from '@/api/template'
 import ImageDialog from '@/components/ImageDialog'
+import ItemDialog from '@/components/ItemDialog'
 export default{
     components:{
-        ImageDialog
+        ImageDialog,
+        ItemDialog
     },
     data(){
         return{
@@ -208,7 +223,8 @@ export default{
             current:{
                 type:null,
                 index:null
-            }
+            },
+            addShow:false
         }
     },
     created(){
@@ -302,8 +318,11 @@ export default{
                 _data.map((v,n)=>{
                     v.sort = n
                 })
-                console.log(_data)
             }).catch(()=>{})
+        },
+        addItem(type){
+            console.log(type)
+            this.addShow = true
         }
     }
 }
