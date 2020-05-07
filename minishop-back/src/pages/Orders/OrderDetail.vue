@@ -6,17 +6,16 @@
 		<el-button v-if="status === 'pending'" type="info" @click='closedOrder'>关闭订单</el-button>
 		<el-button v-if="refund_status ==='refunding'" type='primary' @click="refundOrder('refunded')">同意退单</el-button>
 		<el-button v-if="refund_status ==='refunding'" type="danger" @click="refundOrder('refund_refuse')">拒绝退单</el-button>
-
 	</div>
-	<div class="order-top" style="width:calc(100% - 20px)">
-		<el-steps :active="status_active" finish-status="success" simple>
+	<div class="order-top" style="width:calc(100% - 5px)">
+		<el-steps :active="status_active" :finish-status="status === 'cancel' || status === 'closed' || status === 'refunded' ? 'wait' : 'success'" simple>
 			<el-step v-for = "(status_process,index) in status_processes" :key="index" :title="status_process.value"></el-step>
 		</el-steps>
 	</div>
 	<div class="order-contain">
 		<div class="order-main">
 			<div>
-				<div style="margin-bottom: 10px">
+				<div class="order-block-title">
 					<strong>商品详情</strong>
 					<el-button v-if="status == 'processing'" style="padding: 5px 10px ; margin-left: 20px" type='primary' @click="openSendDialog">发货</el-button>
 				</div>
@@ -25,113 +24,117 @@
 						<el-image :src="item.img_url" style="width: 60px;height: 60px" fit="contain"></el-image>
 					</div>
 					<div class="order_items_info">
-						<div>
-						{{item.product_title}}
-						</div>
-						<div>
-						规格：{{item.variant_title}}
-						</div>
+						<div>{{item.product_title}}</div>
+						<div>规格：{{item.variant_title}}</div>
 					</div>
 					<div class="order_items_quantity">
-						<div>
-							数量：x {{item.quantity}} {{item.product_unit}}
+						<div>¥ <strong>{{ item.price }}</strong> x <strong>{{item.quantity}}</strong></div>
+						<div>总计：¥ {{item.total}}</div>
+					</div>
+				</div>
+				<div class="order-price-list">
+					<div>
+						<div>商品总计：</div>
+						<div>¥ {{items_amount}}</div>
+					</div>
+					<div>
+						<div>运费总计：</div>
+						<div>¥ {{shipments_amount}}</div>
+					</div>
+					<div>
+						<div>优惠总计：</div>
+						<div>-¥ {{discounts_amount}}</div>
+					</div>
+					<div>
+						<div>订单总计：</div>
+						<div v-if="ori_amount == amount">¥ <strong>{{amount}}</strong></div>
+						<div v-else>
+							<div style="text-decoration: line-through;">¥ {{ori_amount}}</div>  
+							<div>¥ <strong>{{amount}}</strong></div>
 						</div>
-						<div>
-							总计：¥ {{item.total}}
-						</div>
+					</div>
+					<div v-if="status == 'pending'">
+						<el-button style="float: right; padding: 3px 0 ; margin-right: 10px" type ='text' @click="updatePriceOrder">修改价格</el-button>
 					</div>
 				</div>
 			</div>
 			<div class="order-remark">
-				<div><strong>客户备注</strong></div>
-				<div>{{remark}}</div>
-			</div>
-			<div class="order-price-list">
-				<div>
-					<div><strong>商品总计:</strong></div>
-					<div>{{items_amount}}</div>
-				</div>
-				<div>
-					<div><strong>运费总计:</strong></div>
-					<div>{{shipments_amount}}</div>
-				</div>
-				<div>
-					<div><strong>优惠总计:</strong></div>
-					<div>-{{discounts_amount}}</div>
-				</div>
-				<div>
-					<div><strong>订单总计:</strong></div>
-					<div v-if="ori_amount == amount">{{amount}}</div>
-					<div v-else>
-						<div style="text-decoration: line-through;">{{ori_amount}}</div>  
-						<div>{{amount}}</div>
-					</div>
-				</div>
-				<div v-if="status == 'pending'">
-					<el-button style="float: right; padding: 3px 0 ; margin-right: 10px" type ='text' @click="updatePriceOrder">修改价格</el-button>
-				</div>
+				<div class="order-block-title"><strong>客户备注</strong></div>
+				<div style="padding:10px">{{ remark ? remark : '暂无' }}</div>
 			</div>
 		</div>
 		<div class="order-subside">
 			<div class='order-subside-card'>
-				<el-card class="box-card" shadow="hover">
-					<div slot="header" class="clearfix">
-					<strong>订单信息</strong>
+				<div class="order-block-title">订单信息</div>
+				<div class="order-block-content">
+					<div>
+						<div>订单编号：</div>
+						<div>{{no}}</div>
 					</div>
-					<div>订单编号：{{no}}</div>
-					<div v-if="payment">支付方式：{{payment.payment_method}}</div>
-					<div v-if="payment">支付时间：{{payment.created_at}}</div>
-				</el-card>
+					<div v-if="payment">
+						<div>支付方式：</div>
+						<div>{{payment.payment_method}}</div>
+					</div>
+					<div v-if="payment">
+						<div>支付时间：</div>
+						<div>{{payment.created_at}}</div>
+					</div>
+				</div>
 			</div>
 			<div class='order-subside-card'>
-				<el-card class="box-card" shadow="hover">
-					<div slot="header" class="clearfix">
-					<strong>客户信息</strong>
+				<div class="order-block-title">客户信息</div>
+				<div class="order-block-content">
+					<div>
+						<div>用户名：</div>
+						<div>{{customer.username}}</div>
 					</div>
-					<div>用户名：{{customer.username}}</div>
-					<div>手机号：{{customer.mobile}}</div>
-				</el-card>
+					<div>
+						<div>手机号：</div>
+						<div>{{customer.mobile}}</div>
+					</div>
+				</div>
 			</div>
 			<div class='order-subside-card'>
-				<el-card class="box-card" shadow="hover">
-					<div slot="header" class="clearfix">
-					<strong>配送信息</strong>
-					<!-- <el-button style="float: right; padding: 3px 0" type="text">修改</el-button> -->
+				<div class="order-block-title">配送信息</div>
+				<div class="order-block-content">
+					<div>
+						<div>姓名：</div>
+						<div>{{address.name}}</div>
 					</div>
-					<div>姓名：{{address.name}}</div>
-					<div>地址：{{address.address}}</div>
-					<div>电话：{{address.mobile}}</div>
-					<div>邮编：{{address.zip}}</div>
-				</el-card>
+					<div>
+						<div>地址：</div>
+						<div>{{address.address}}</div>
+					</div>
+					<div>
+						<div>电话：</div>
+						<div>{{address.mobile}}</div>
+					</div>
+					<div>
+						<div>邮编：</div>
+						<div>{{address.zip}}</div>
+					</div>
+				</div>
 			</div>
 			<div class='order-subside-card'>
-				<el-card class="box-card" shadow="hover">
-					<div slot="header" class="clearfix">
-					<strong>配送列表</strong>
-					</div>
-					<div v-if='shipments.length'>
-						<el-collapse>
-							<el-collapse-item v-for="(shipment , index) in shipments" :key="index" :title="'配送'+ (index + 1)" :name="index">
-								<div>配送方式：{{shipment.shipment_company}}</div>
-								<div>配送单号：{{shipment.shipment_no}}</div>
-								<div>
-									<ul>
-										<li v-for="(item , index) in shipment.items" :key="index">
-											{{item.product_title}} [规格]{{item.variant_title}} x {{item.quantity}}
-										</li>
-									</ul>
-								</div>
-							</el-collapse-item>
-						</el-collapse>
-					</div>
-					<div v-else>
-						还未配送
-					</div>
-				</el-card>
+				<div class="order-block-title">配送列表</div>
+				<div v-if='shipments.length !== 0'>
+					<el-collapse>
+						<el-collapse-item v-for="(shipment,index) in shipments" :key="index" :title="'配送'+ (index + 1)" :name="index">
+							<div>配送方式：{{shipment.shipment_company}}</div>
+							<div>配送单号：{{shipment.shipment_no}}</div>
+							<div>
+								<ul>
+									<li v-for="(item , index) in shipment.items" :key="index">{{item.product_title}} [规格]{{item.variant_title}} x {{item.quantity}}</li>
+								</ul>
+							</div>
+						</el-collapse-item>
+					</el-collapse>
+				</div>
+				<div v-else style="padding:10px">还未配送</div>
 			</div>
 		</div>
 	</div>
-	<el-dialog title='发货面板' :visible.sync="sendDialogShow">
+	<el-dialog title='发货' :visible.sync="sendDialogShow">
 		<el-form label-width="80px">
 			<el-form-item label="配送公司">
 				<el-input v-model="sendInfo.shipment_company"></el-input>
@@ -365,64 +368,101 @@
 <style lang="scss" scoped>
 @import "@/assets/style/base.scss";
 .order-top-button{
-margin-bottom: 10px;
+	margin-bottom: 10px;
+	padding-bottom:10px;
+	border-bottom:1px solid $line-color;
 }
 .order-top {
-height: 47px;
-border: 1px solid $line-color;
-border-radius: 3px;
-margin-bottom: 10px;
+	height: 47px;
+	border: 1px solid $line-color;
+	border-radius: 3px;
+	margin-bottom: 10px;
 }
 .order-main {
-display: inline-block;
-min-height:300px;
-width: 70%;
-vertical-align: top;
-border: 1px solid $line-color;
-border-radius: 5px;
-padding: 5px;
+	display: inline-block;
+	min-height:300px;
+	width: 70%;
+	vertical-align: top;
 }
 .order-main>div {
-	margin-bottom: 40px;
+	border:1px solid $line-color;
+	border-radius:5px;
+	margin-bottom:20px;
 }
 .order-subside {
-display: inline-block;
-width: calc(30% - 40px);
-vertical-align: top;
-padding: 5px;
-margin-left: 6px;
+	display: inline-block;
+	width: calc(30% - 8px);
+	vertical-align: top;
+	margin-left: 6px;
 }
 .order-subside .order-subside-card{
-margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
+.order_items{
+	margin:0 10px;
+	padding:10px 0;
+	border-bottom:1px dotted $line-color;
+}
 .order_items .order_items_img {
-display: inline-block;
-text-align:center;
-width:65px;
-height:65px;
-vertical-align: middle;
+	display: inline-block;
+	text-align:center;
+	width:65px;
+	height:65px;
+	vertical-align: middle;
 }
 
 .order_items .order_items_info {
-margin-left: 15px;
-display: inline-block;
-width: 450px;
-vertical-align: top;
+	margin-left: 15px;
+	display: inline-block;
+	width: 450px;
+	vertical-align: top;
 }
 
 .order_items .order_items_quantity {
-display: inline-block;
-vertical-align: top;
+	display: inline-block;
+	vertical-align: top;
+}
+.order-price-list{
+	padding:10px 0;
 }
 .order-price-list>div{
-text-align: right;	
+	text-align: right;	
 }
 .order-price-list>div>div{
-width: 80px;
-display:inline-block;
-margin-right: 10px;
-vertical-align: top;
+	width: 80px;
+	display:inline-block;
+	margin-right: 10px;
+	vertical-align: top;
+}
+.order-price-list>div>div:first-child{
+	color:$sub-font-color;
 }
 
+.order-subside-card{
+	border:1px solid $line-color;
+	border-radius:5px;
+}
+.order-block-title{
+	line-height:40px;
+	padding:0 10px;
+	background-color:$background-color;
+	border-bottom:1px solid $line-color;
+}
+.order-block-content{
+	padding:0 10px;
+}
+.order-block-content>div{
+	padding:5px 0;
+}
+.order-block-content>div>div{
+	display:inline-block;
+	vertical-align:top;
+}
+.order-block-content>div>div:first-child{
+	width:80px;
+}
+.order-block-content>div>div:last-child{
+	width:calc(100% - 80px);
+}
 </style>

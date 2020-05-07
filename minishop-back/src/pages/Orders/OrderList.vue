@@ -24,6 +24,7 @@
 		</div>
 	</div>
 	<div v-loading="loading" style="min-height:400px">
+		<div v-if="!loading && orderData.length === 0" class="loading-placeholder">暂无订单</div>
 		<div v-for="(order,index) in orderData" :key="index" class="order-item">
 			<div class="order-header">
 				<strong style="margin-right:10px;" @click="toDetail(order)">{{ order.no }}</strong>
