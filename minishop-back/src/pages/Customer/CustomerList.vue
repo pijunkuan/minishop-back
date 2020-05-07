@@ -160,9 +160,7 @@ export default{
                     this.$message.success('操作成功')
                     this.getData()
                 })
-            }).catch(()=>{
-                this.$message.info('关闭')
-            })
+            }).catch(()=>{})
         },
         search(){
             this.query = {
@@ -182,6 +180,8 @@ export default{
         toWallet(id){
             this.walletListShow = true
             this.walletCustomerId = id
+            this.walletData = []
+            this.walletBalance = 0
             this.getWalletData()
         },
         walletHandleCurrentChange(val){
