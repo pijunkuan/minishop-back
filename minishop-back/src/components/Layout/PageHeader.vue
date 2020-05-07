@@ -6,7 +6,7 @@
     </div>
     <div class="header-item header-item-main">{{ $store.getters.title }}</div>
     <div class="header-item header-item-side">
-        <span>{{ $store.getters.username }}</span>
+        <span @click="toEdit" style="cursor:pointer">{{ $store.getters.username }}</span>
         <span @click="toLogout" style="cursor:pointer">退出<i class="iconfont icontuichu1"></i></span>
     </div>
 </div>
@@ -35,6 +35,9 @@ export default{
                     this.$router.push({name:'Login'})
                 },1000)
             })
+        },
+        toEdit(){
+            if(this.$route.name !== 'UserEdit') this.$router.push({name:'UserEdit'})
         }
     }
 }

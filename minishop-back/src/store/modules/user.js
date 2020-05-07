@@ -1,5 +1,5 @@
 import { getToken, setToken, removeToken, getExtime, setExtime, removeExtime } from '@/utils/auth'
-import { login, get_user } from '@/api/login'
+import { login, get_user, edit_user } from '@/api/login'
 
 const user = {
 	state:{
@@ -37,6 +37,20 @@ const user = {
 			return new Promise((resolve,reject)=>{
 				get_user().then(r=>{
 					commit('SET_USER',r.data.body.username)
+					resolve(r)
+				}).catch(e=>{
+					reject(e)
+				})
+			})
+		},
+		edit({commit},data){
+			return new Promise((resolve,reject)=>{
+				edit_user(data).then(r=>{
+					let expire = new Date().getTime() + r.data.body.expires_in * 1000
+					commit('SET_TOKEN',r.data.body.access_token)
+					commit('SET_TIME',expire)
+					setToken(r.data.body.access_token)
+					setExtime(expire)
 					resolve(r)
 				}).catch(e=>{
 					reject(e)

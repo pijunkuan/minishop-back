@@ -15,3 +15,11 @@ export function get_user(){
 		method:'get'
 	})
 }
+
+export function edit_user(data){
+	return request({
+		url:'me',
+		method:"put",
+		data
+	})
+}

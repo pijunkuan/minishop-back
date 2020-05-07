@@ -22,7 +22,7 @@ export const allRoutes = [
 		meta:{ title:'首页', icon:'iconshouye' },
 		component: Layout,
 		children:[
-			{ path:'', name:'Dashboard', component: r => require(['./pages/Home/index.vue'],r) }
+			{ path:'', name:'Dashboard', component: r => require(['./pages/Home/index.vue'],r), hidden:false}
 		]
 	},
 	{
@@ -72,6 +72,15 @@ export const allRoutes = [
 		children:[
 			{ path:'theme', name:'SetTheme', component: r => require(['./pages/Setting/SetTheme.vue'],r), meta:{ title:'主题设置', icon:'icontupian1' }, hidden:false },
 			{ path:'shipment', name:'SetShip', component: r => require(['./pages/Setting/SetShip.vue'],r), meta:{ title:'物流设置', icon:'icontupian1' }, hidden:false },
+		]
+	},
+	{
+		path:'/user',
+		hidden:true,
+		meta:{title:'个人设置',icon:"iconxiaolian"},
+		component:Layout,
+		children:[
+			{ path:'edit',name:'UserEdit',component:r=> require(['./pages/User/Edit.vue'],r),meta:{title:'个人设置'}, hidden:false}
 		]
 	}
 ]
