@@ -71,16 +71,16 @@ export default{
             this.getImages()
         },
         beforeUpload(file){
-            const isJPG = file.type === 'image/jpeg'
+            const isJPGPNG = file.type === 'image/jpeg' || file.type === 'image/png'
             const isLt2M = file.size / 1024 / 1024 < 2
 
-            if (!isJPG) {
-                this.$message.error('上传图片只能是 JPG 格式!')
+            if (!isJPGPNG) {
+                this.$message.error('上传图片只能是 JPG 或 PNG 格式!')
             }
             if (!isLt2M) {
                 this.$message.error('上传图片大小不能超过 2MB!')
             }
-            return isJPG && isLt2M
+            return isJPGPNG && isLt2M
         },
         successUpload(){
             this.$message.success('上传成功')

@@ -12,7 +12,7 @@ const user = {
 			state.username = username
 		},
 		SET_TOKEN:(state,token)=>{
-			state.totken = token
+			state.token = token
 		},
 		SET_TIME:(state, time)=>{
 			state.expire_time = time

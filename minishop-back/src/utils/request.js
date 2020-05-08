@@ -6,7 +6,7 @@ import axios from 'axios'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 import defaultSettings from '@/settings'
-// import { Message } from 'element-ui'
+import { Message } from 'element-ui'
 
 
 const service = axios.create({
@@ -28,7 +28,10 @@ service.interceptors.request.use(
 service.interceptors.response.use(
 	response => response,
 	error => {
-		// Message.error(error.response.data.message)
+		if(error.response.status === 401){
+			Message.error('登录超时，请重新登录')
+			store.dispatch('logout')
+		}
 		return Promise.reject(error)
 	}
 )

@@ -9,6 +9,7 @@ export const allRoutes = [
 	{
 		path:'/login',
 		hidden:true,
+		name:'Login',
 		component: r => require(['./pages/Login/Login.vue'],r)
 	},
 	{

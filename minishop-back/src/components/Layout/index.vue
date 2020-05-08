@@ -40,12 +40,23 @@ export default{
     vertical-align:top;
     width:calc(100% - 166px);
     height:100%;
-    overflow-y:auto;
+    overflow:auto;
+    min-width:794px;
 }
 .main-content.is-collapse{
     width:calc(100% - 66px);
 }
 .main-content>div{
     margin:15px;
+}
+
+.main-content::-webkit-scrollbar{
+    display:none;
+}
+
+@media (max-width:960px){
+    .main-container{
+        width:960px;
+    }
 }
 </style>

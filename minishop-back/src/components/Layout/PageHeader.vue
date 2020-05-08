@@ -85,6 +85,12 @@ export default{
     top:1px;
     margin-left:2px;
 }
+
+@media (max-width:960px){
+    .header-container{
+        width:960px;
+    }
+}
 </style>
 <style>
 .el-submenu .el-menu-item{
