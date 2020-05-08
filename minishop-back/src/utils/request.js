@@ -4,6 +4,7 @@
 
 import axios from 'axios'
 import store from '@/store'
+import router from '@/router'
 import { getToken } from '@/utils/auth'
 import defaultSettings from '@/settings'
 import { Message } from 'element-ui'
@@ -31,6 +32,7 @@ service.interceptors.response.use(
 		if(error.response.status === 401){
 			Message.error('登录超时，请重新登录')
 			store.dispatch('logout')
+			router.push({name:'Login'})
 		}
 		return Promise.reject(error)
 	}

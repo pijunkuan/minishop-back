@@ -8,7 +8,9 @@
         <div v-loading="loading">
             <div v-if="!selectTheme" style="margin:10px 10px 20px"><strong>提示：暂未选择主题颜色</strong></div>
             <el-radio v-for="(color,index) in colors" :key="index" :label="color.value" v-model="selectTheme">
-                <el-image :src="color.img" style="width:160px;height:284px;"></el-image>
+                <div class="theme-template">
+                    <el-image fit="scale-down" :src="color.img" style="width:160px;height:284px;"></el-image>
+                </div>
                 <div style="text-align:center;margin:10px 0 20px">{{ color.name }}</div>
             </el-radio>
         </div>
@@ -20,23 +22,31 @@
         </div>
         <div>
             <div class="module-template">
+                <div class="module-template-title">模块设置示例</div>
+                <el-image src="//asset.ibanquan.com/image/5eb5d62936a6ce0021f438e4/s.jpeg?v=1588975146" style="width:240px;height:183.5px" fit="scale-down"></el-image>
+                <div class="module-template-tip">
+                    此模块置于主页顶部，搜索框之下，请上传<strong>尺寸 750 * 500 像素</strong>的图片
+                </div>
             </div>
             <div class="module-content" v-loading="t_loading">
                 <div class="module-content-title">
-                    <div style="width:80px">图片</div>
-                    <div style="width:calc(100% - 170px);margin:0 5px;">链接</div>
+                    <div style="width:150px">图片</div>
+                    <div style="width:calc(100% - 274px);margin:0 5px;">链接</div>
                     <div style="width:80px">操作</div>
                 </div>
                 <div v-for="(banner,index) in banners" :key="index" class="module-content-content">
                     <div class="module-content-image" style="position:relative">
-                        <div class="image-cover-button" style="line-height:50px;height:50px;width:80px">
+                        <div class="image-cover-button" style="line-height:100px;height:100px;width:150px">
                             <el-button type="text" size="small" @click="changeImage('banner',index)">选择</el-button>
                         </div>
-                        <el-image :src="banner.img" fit="scale-down" style="width:80px;height:50px"></el-image>
+                        <el-image :src="banner.img" fit="scale-down" style="width:150px;height:100px"></el-image>
                     </div>
-                    <div class="link-input" style="width:calc(100% - 204px);margin:0 5px;" @click="getLink('banner',index)">
-                        <span v-if="banner.link.name">{{ banner.link.name }}</span>
-                        <span v-else class="link-input-placeholder">选填，广告图跳转链接</span>
+                    <div class="link-input" style="width:calc(100% - 274px);margin:0 5px;" @click="getLink('banner',index)">
+                        <div :class="{'is-error':bannerDisabled.indexOf(banner.link.query) !== -1}">
+                            <span v-if="banner.link.name">{{ banner.link.name }}</span>
+                            <span v-else class="link-input-placeholder">选填，广告图跳转链接</span>
+                        </div>
+                        <div class="error-tip" v-if="bannerDisabled.indexOf(banner.link.query) !== -1">商品已删除，为不影响购买体验，请及时更换链接，并保存模块</div>
                     </div>
                     <div class="module-content-button" style="width:80px">
                         <span @click="toFront('banner',index)"><i class="iconfont iconxiangshang"></i></span>
@@ -57,7 +67,13 @@
             <el-button type="primary" size="mini" @click="changeTemplate('types')">保存</el-button>
         </div>
         <div>
-            <div class="module-template"></div>
+            <div class="module-template">
+                <div class="module-template-title">模块设置示例</div>
+                <el-image src="//asset.ibanquan.com/image/5eb5d88336a6ce0016f43d03/s.jpeg?v=1588975747" fit="scale-down"></el-image>
+                <div class="module-template-tip">
+                    此模块置于主页广告图下方，请上传<strong>尺寸 50 * 50 像素</strong>的图片
+                </div>
+            </div>
             <div class="module-content" v-loading="t_loading">
                 <div class="module-content-title"><strong>是否显示</strong></div>
                 <div style="margin-bottom:30px;">
@@ -74,12 +90,15 @@
                         <div class="image-cover-button" style="line-height:50px;height:50px;width:50px">
                             <el-button type="text" size="small" @click="changeImage('type',index)">选择</el-button>
                         </div>
-                        <el-image :src="type.img" style="width:50px;height:50px"></el-image>
+                        <el-image :src="type.img" fit="scale-down" style="width:50px;height:50px"></el-image>
                     </div>
                     <el-input maxlength="4" v-model="type.title" style="width:100px;margin:0 5px;" placeholder="4个字以内"></el-input>
                     <div class="link-input" style="width:calc(100% - 262px);margin:0 5px;" @click="getLink('type',index)">
-                        <span v-if="type.link.name">{{ type.link.name }}</span>
-                        <span v-else class="link-input-placeholder">选填，广告图跳转链接</span>
+                        <div :class="{'is-error':typeDisabled.indexOf(type.link.query) !== -1}">
+                            <span v-if="type.link.name">{{ type.link.name }}</span>
+                            <span v-else class="link-input-placeholder">选填，广告图跳转链接</span>
+                        </div>
+                        <div class="error-tip" v-if="typeDisabled.indexOf(type.link.query) !== -1">商品已删除，为不影响购买体验，请及时更换链接，并保存模块</div>
                     </div>
                     <div class="module-content-button" style="width:60px">
                         <span @click="toFront('type',index)"><i class="iconfont iconxiangshang"></i></span>
@@ -95,7 +114,13 @@
             <el-button type="primary" size="mini" @click="changeTemplate('message')">保存</el-button>
         </div>
         <div>
-            <div class="module-template"></div>
+            <div class="module-template">
+                <div class="module-template-title">模块设置示例</div>
+                <el-image src="//asset.ibanquan.com/image/5eb5d95f36a6ce000bf43dab/s.jpeg?v=1588975968" fit="scale-down"></el-image>
+                <div class="module-template-tip">
+                    此模块置于主页分类标签下方，如果文字内容超过手机屏幕宽度，将<strong>自动滚动播放</strong>
+                </div>
+            </div>
             <div class="module-content" v-loading="t_loading">
                 <div class="module-tip" style="margin-bottom:10px">提示：如果设置消息将自动显示，如果不设置将隐藏此模块</div>
                 <el-input v-model="message" placeholder="请输入主页通知的消息"></el-input>
@@ -108,7 +133,15 @@
             <el-button type="primary" size="mini" @click="changeTemplate('limit')">保存</el-button>
         </div>
         <div>
-            <div class="module-template"></div>
+            <div class="module-template">
+                <div class="module-template-title">模块设置示例</div>
+                <el-image src="//asset.ibanquan.com/image/5eb5da4636a6ce000bf43dae/s.jpeg?v=1588976198" fit="scale-down"></el-image>
+                <div class="module-template-tip">
+                    <div>此模块置于主页消息通知下方</div>
+                    <div>可设置优惠结束时间，如果结束时间距离客户浏览时间为0秒时，会<strong>自动提示活动已结束</strong></div>
+                    <div>最多可添加<strong>10个</strong>商品，<strong>向右滑动</strong>即可浏览商品</div>
+                </div>
+            </div>
             <div class="module-content" v-loading="t_loading">
                 <div class="module-content-title"><strong>是否显示</strong></div>
                 <div style="margin-bottom:30px;">
@@ -120,10 +153,14 @@
                 <div>
                     <div v-if="limit.items.length === 0 && !t_loading" style="margin-bottom:10px" class="module-tip">暂无商品</div>
                     <div v-for="(item,index) in limit.items" :key="index" class="module-content-items" style="position:relative">
+                        <div class="module-content-items-disabled" v-if="limitDisabled.indexOf(item.id) !== -1">
+                            <div>此商品已被删除，为不影响购买体验，请及时删除该商品，并保存模块</div>
+                            <div style="text-align:center"><el-button type="text" @click="deleteItem('limit',index)">删除</el-button></div>
+                        </div>
                         <div class="module-content-items-button">
                             <span @click="deleteItem('limit',index)"><i class="iconfont iconshanchu1"></i></span>
                         </div>
-                        <el-image :src="item.img" style="width:180px;height:180px"></el-image>
+                        <el-image :src="item.img" fit="scale-down" style="width:180px;height:180px;"></el-image>
                         <div class="input-group">
                             <el-input v-model="item.product_title" maxlength="10" placeholder="商品名称，10个字以内"></el-input>
                             <el-input v-model="item.sub_title" placeholder="宣传语，8个字以内" maxlength="8"></el-input>
@@ -145,7 +182,14 @@
             <el-button type="primary" size="mini" @click="changeTemplate('newitem')">保存</el-button>
         </div>
         <div>
-            <div class="module-template"></div>
+            <div class="module-template">
+                <div class="module-template-title">模块设置示例</div>
+                <el-image src="//asset.ibanquan.com/image/5eb5db536da86b0013760803/s.jpeg?v=1588976468" fit="scale-down"></el-image>
+                <div class="module-template-tip">
+                    <div>此模块置于主页限时折扣下方</div>
+                    <div>最多可添加<strong>10个</strong>商品</div>
+                </div>
+            </div>
             <div class="module-content" v-loading="t_loading">
                 <div class="module-content-title"><strong>是否显示</strong></div>
                 <div style="margin-bottom:30px;">
@@ -155,13 +199,17 @@
                 <div>
                     <div v-if="newitem.items.length === 0 && !t_loading" style="margin-bottom:10px" class="module-tip">暂无商品</div>
                     <div v-for="(item,index) in newitem.items" :key="index" class="module-content-items" style="position:relative">
-                        <div class="module-content-items-button">
-                            <span @click="deleteItem('limit',index)"><i class="iconfont iconshanchu1"></i></span>
+                        <div class="module-content-items-disabled" v-if="limitDisabled.indexOf(item.id) !== -1">
+                            <div>此商品已被删除，为不影响购买体验，请及时删除该商品，并保存模块</div>
+                            <div style="text-align:center"><el-button type="text" @click="deleteItem('newitem',index)">删除</el-button></div>
                         </div>
-                        <el-image :src="item.img" style="width:180px;height:180px"></el-image>
+                        <div class="module-content-items-button">
+                            <span @click="deleteItem('newitem',index)"><i class="iconfont iconshanchu1"></i></span>
+                        </div>
+                        <el-image :src="item.img" fit="scale-down" style="width:180px;height:180px"></el-image>
                         <div class="input-group">
-                            <el-input v-model="item.product_title" placeholder="商品名称，10个字以内"></el-input>
-                            <el-input v-model="item.sub_title" placeholder="宣传语，8个字以内"></el-input>
+                            <el-input v-model="item.product_title" placeholder="商品名称，20个字以内" maxlength="20"></el-input>
+                            <el-input v-model="item.sub_title" placeholder="宣传语，8个字以内" maxlength="8"></el-input>
                             <el-input type="number" step="0.01" v-model="item.price" placeholder="商品售价"></el-input>
                             <el-input type="number" step="0.01" v-model="item.ori_price" placeholder="商品原价"></el-input>
                         </div>
@@ -180,7 +228,13 @@
             <el-button type="primary" size="mini" @click="changeTemplate('ad')">保存</el-button>
         </div>
         <div>
-            <div class="module-template"></div>
+            <div class="module-template">
+                <div class="module-template-title">模块设置示例</div>
+                <el-image src="//asset.ibanquan.com/image/5eb5dbf836a6ce0016f43d06/s.jpeg?v=1588976632" fit="scale-down"></el-image>
+                <div class="module-template-tip">
+                    此模块置于主页今日上新下方，请上传<strong>尺寸 750 * 600 像素</strong>的图片
+                </div>
+            </div>
             <div class="module-content" v-loading="t_loading">
                 <div class="module-content-title"><strong>是否显示</strong></div>
                 <div style="margin-bottom:30px;">
@@ -188,7 +242,7 @@
                 </div>
                 <div class="module-ad-content">
                     <div>
-                        <el-image :src="ad.img" style="width:150px;height:150px"></el-image>
+                        <el-image :src="ad.img" fit="scale-down" style="width:150px;height:120px"></el-image>
                         <div>
                             <el-button type="text" size="small" @click="changeImage('ad',null)">更换图片</el-button>
                         </div>
@@ -197,10 +251,12 @@
                         <el-input v-model="ad.title" maxlength="15" placeholder="商品名称，15个字以内"></el-input>
                         <el-input v-model="ad.sub_title" maxlength="10" placeholder="宣传语，10个字以内"></el-input>
                         <el-input type="number" step="0.01" v-model="ad.price" placeholder="商品售价"></el-input>
-                        <el-input type="number" step="0.01" v-model="ad.ori_price" placeholder="商品原价"></el-input>
-                        <div class="link-input" style="border:none" @click="getLink('ad',null)">
-                            <span v-if="ad.link.name">{{ ad.link.name }}</span>
-                            <span v-else class="link-input-placeholder">选填，广告图跳转链接</span>
+                        <div class="link-input" @click="getLink('ad',null)">
+                            <div :class="{'is-error':adDisabled.indexOf(ad.link.query) !== -1}" style="border:none">
+                                <span v-if="ad.link.name">{{ ad.link.name }}</span>
+                                <span v-else class="link-input-placeholder">选填，广告图跳转链接</span>
+                            </div>
+                            <div class="error-tip" v-if="adDisabled.indexOf(ad.link.query) !== -1" style="padding-bottom:10px">商品已删除，为不影响购买体验，请及时更换链接，并保存模块</div>
                         </div>
                     </div>
                 </div>
@@ -216,6 +272,7 @@
 <script>
 import { get_theme, change_theme } from '@/api/theme'
 import { get_template, change_template } from '@/api/template'
+import { get_product } from '@/api/product'
 import ImageDialog from '@/components/ImageDialog'
 import ItemDialog from '@/components/ItemDialog'
 import LinkDialog from '@/components/LinkDialog'
@@ -229,11 +286,11 @@ export default{
         return{
             loading:false,
             colors:[
-                { value:'summer', name:'夏日艳阳', img:'' },
-                { value:'water', name:'清爽', img:'' },
-                { value:'spring', name:'春日绿', img:'' },
-                { value:'forest', name:'森林', img:'' },
-                { value:'purple', name:'静谧紫', img:'' },
+                { value:'summer', name:'夏日艳阳', img:'//asset.ibanquan.com/image/5eb5d27c6da86b000f7608b1/s.jpeg?v=1588974204' },
+                { value:'water', name:'清爽蓝', img:'//asset.ibanquan.com/image/5eb5d2de36a6ce0021f438e1/s.jpeg?v=1588974302' },
+                { value:'spring', name:'春日绿', img:'//asset.ibanquan.com/image/5eb5d35f6da86b000b7603e2/s.jpeg?v=1588974431' },
+                { value:'forest', name:'森林绿', img:'//asset.ibanquan.com/image/5eb5d3b736a6ce002cf43ca1/s.jpeg?v=1588974519' },
+                { value:'purple', name:'静谧紫', img:'//asset.ibanquan.com/image/5eb5d1f036a6ce0016f43d00/s.jpeg?v=1588974065' },
             ],
             selectTheme:'',
             template:{},
@@ -276,7 +333,12 @@ export default{
             },
             current_items:[],
             addShow:false,
-            linkShow:false
+            linkShow:false,
+            limitDisabled:[],
+            newDisabled:[],
+            bannerDisabled:[],
+            typeDisabled:[],
+            adDisabled:[]
         }
     },
     created(){
@@ -303,27 +365,75 @@ export default{
             this.t_loading = true
             get_template().then(r=>{
                 let _template = r.data.body
-                if(_template.banners !== undefined) this.banners = _template.banners
-                if(_template.types !== undefined) this.types = _template.types
+                if(_template.banners !== undefined){
+                    this.banners = _template.banners
+                    let _link = this.banners.filter((val)=>{ return val.link.link === 'Product' })
+                    if(_link.length !== 0){
+                        let _data = []
+                        this.banners.map(v=>{
+                            _data.push(v.link)
+                        })
+                        this.testLink('banner',_data)
+                    }
+                }
+                if(_template.types !== undefined){
+                    this.types = _template.types
+                    let _link = this.types.items.filter((val)=>{ return val.link.link === 'Product' })
+                    if(_link.length !== 0){
+                        let _data = []
+                        this.types.items.map(v=>{
+                            _data.push(v.link)
+                        })
+                        this.testLink('type',_data)
+                    }
+                }
                 if(_template.message !== undefined) this.message = _template.message
-                if(_template.limit !== undefined) this.limit = _template.limit
-                if(_template.newitem !== undefined) this.newitem = _template.newitem
-                if(_template.ad !== undefined) this.ad = _template.ad
+                if(_template.limit !== undefined){
+                    this.limit = _template.limit
+                    if(this.limit.items.length !== 0) this.testItems('limit',this.limit.items)
+                }
+                if(_template.newitem !== undefined){
+                    this.newitem = _template.newitem
+                    if(this.newitem.items.length !== 0) this.testItems('new',this.newitem.items)
+                }
+                if(_template.ad !== undefined){
+                    this.ad = _template.ad
+                    if(this.ad.link.link === 'Product'){
+                        let _data = []
+                        _data.push(this.ad.link)
+                        this.testLink('ad',_data)
+                    }
+                }
                 this.template = r.data.body
                 this.t_loading = false
             }).catch(()=>{
                 this.t_loading = false
             })
         },
+        testItems(type,data){
+            let _data = type === 'limit' ? this.limitDisabled : this.newDisabled
+            data.map(v=>{
+                get_product(v.id).then(()=>{}).catch(e=>{
+                    if(e.response.status === 404) _data.push(v.id)
+                })
+            })
+        },
+        testLink(type,data){
+            let _data = type === 'banner' ? this.bannerDisabled : (type === 'type' ? this.typeDisabled : this.adDisabled)
+            data.map(v=>{
+                get_product(v.query).then(()=>{}).catch(e=>{
+                    if(e.response.status === 404) _data.push(v.query)
+                })
+            })
+        },
         changeTemplate(type){
             let _content = type === 'banners' ? this.banners : (type === 'types' ? this.types : (type === 'message' ? this.message : (type === 'newitem' ? this.newitem : (type === 'limit' ? this.limit : this.ad))))
             this.template[type] = _content
-            // change_template({template:{}}).then(()=>{
             change_template({template:this.template}).then(()=>{
                 this.$message.success('保存成功')
                 this.getTemplate()
             }).catch(e=>{
-                this.$message.warning(e.response.data.message)
+                if(e.response.status !== 401) this.$message.warning(e.response.data.message)
             })
         },
         changeImage(type,index){
@@ -416,7 +526,7 @@ export default{
             this.addShow = false
         },
         deleteItem(type,index){
-            let _data = this.current.type === 'limit' ? this.limit : this.newitem
+            let _data = type === 'limit' ? this.limit : this.newitem
             this.$confirm('是否确认删除？', '提示',{
                 confirmButtonText:'确定',
                 cancelButtonText:'取消'
@@ -439,7 +549,6 @@ export default{
                 _data.link = val
             }
             this.linkShow = false
-            console.log(_data)
         }
     }
 }
@@ -479,12 +588,23 @@ export default{
 }
 .module-template{
     display:inline-block;
-    width:260px;
+    width:240px;
+    padding:20px 10px;
+    background-color:$line-color * 1.02;
+    vertical-align:top;
+}
+.module-template-title{
+    margin-bottom:15px;
+    color:$sub-font-color;
+}
+.module-template-tip{
+    margin-top:15px;
 }
 .module-content{
     display:inline-block;
-    width:calc(100% - 270px);
-    margin-left:10px;
+    width:calc(100% - 280px);
+    margin-left:20px;
+    vertical-align:top;
 }
 .module-content-title>div,.module-content-content>div{
     display:inline-block;
@@ -498,9 +618,10 @@ export default{
 .module-content-content{
     margin-bottom:10px;
 }
-.module-content-image .el-image{
+.module-content-image .el-image,.module-content-items .el-image{
     border:1px solid $line-color;
 }
+
 .image-cover-button{
     position:absolute;
     z-index:2;
@@ -537,7 +658,7 @@ export default{
 .module-content-items-button{
     position:absolute;
     height:50px;
-    width:180px;
+    width:182px;
     margin-top:-10px;
     line-height:50px;
     text-align:center;
@@ -554,6 +675,17 @@ export default{
     transform:translateY(10px);
     opacity:1;
 }
+.module-content-items-disabled{
+    position:absolute;
+    height:100px;
+    width:161px;
+    padding:125px 10px;
+    background-color:rgba(0,0,0,0.8);
+    color:#fff;
+    border-radius:5px;
+    z-index:3;
+}
+
 .module-ad-content>div{
     display:inline-block;
     vertical-align:top;
@@ -562,7 +694,7 @@ export default{
     margin-left:10px;
     width:calc(100% - 162px);
 }
-.link-input{
+.link-input>div:first-child{
     padding:10px 15px;
     border:1px solid $line-color;
     border-radius:5px;
@@ -575,5 +707,25 @@ export default{
 }
 .link-input-placeholder{
     color:#cdcdcd;
+}
+.link-input .is-error{
+    color:$error-color!important;
+    border-color:$error-color;
+}
+.link-input .error-tip{
+    font-size:$small-font-size;
+    color:$error-color;
+    padding-left:15px;
+}
+
+.theme-template{
+    height:284px;
+    padding:6px 6px 20px;
+    border-radius:5px;
+    background-color:$line-color;
+    border:2px solid $line-color;
+}
+.is-checked .theme-template{
+    border-color:$main-color;
 }
 </style>

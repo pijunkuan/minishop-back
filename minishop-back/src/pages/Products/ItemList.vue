@@ -19,7 +19,7 @@
 		<el-table-column type="selection" align="center"></el-table-column>
 		<el-table-column prop="img" label="图片" width="130px" align="center">
 			<template slot-scope="scope">
-				<el-image style="width:100px;height:100px;" :src="scope.row.img" fit="cover"></el-image>
+				<el-image style="width:100px;height:100px;" :src="scope.row.img" fit="scale-down"></el-image>
 			</template>
 		</el-table-column>
 		<el-table-column label="商品名称">
