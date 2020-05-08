@@ -5,7 +5,7 @@
 		<el-button type="primary" size="mini" circle plain @click="createCategory"><i class="iconfont iconjiahao"></i></el-button>
 		<span class="category-sub-des">已创建：{{categoryData.length}} 个 / 可新建： {{20 - categoryData.length}}个</span>
 	</div>
-	<el-table :data="categoryData" v-loading="tableLoading">
+	<el-table :data="categoryData" v-loading="tableLoading" border header-row-class-name="table-header-row">
 		<el-table-column label="分类名称" prop="category_title"></el-table-column>
 		<el-table-column label="是否启用">
 			<template slot-scope="scope">
@@ -80,6 +80,10 @@ import {get_categories,update_categories,create_categories,delete_categories} fr
 				this.dialogVisibility = true
 			},
 			createCategory(){
+				if(this.categoryData.length >= 20){
+					this.$message.warning('最多只能添加20个分类')
+					return
+				}
 				this.title="新增"
 				this.dialogId = null
 				this.dialogData = {
@@ -157,5 +161,11 @@ import {get_categories,update_categories,create_categories,delete_categories} fr
 }
 .dialog-edit .el-input {
 	width: 250px
+}
+</style>
+<style lang="scss">
+@import '@/assets/style/base.scss';
+.el-table tr.table-header-row th{
+	background-color:$background-color;
 }
 </style>

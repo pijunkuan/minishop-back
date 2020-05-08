@@ -9,7 +9,7 @@
 		<el-button type="primary" round @click="createShipment" size="small">创建新模板</el-button>
 	</div>
 	<div>
-		<el-table :data="shipData">
+		<el-table :data="shipData" border header-row-class-name="table-header-row">
 			<el-table-column label="模板名称" prop="shipment_title"></el-table-column>
 			<el-table-column label="计费方式" prop="cost_type"></el-table-column>
 			<el-table-column label="是否包邮">
@@ -94,29 +94,34 @@
 
 		</div>
 	</el-dialog>
-	<el-dialog title="运费模板设置说明" :visible.sync="desShow">
+	<el-dialog title="运费模板设置说明" :visible.sync="desShow" width="600px">
 		<div>
 			<div class="shipment-des-sub-title">
-				当选择不包邮时需要进行计算方式设置：
+				运费计算规则：
 			</div>
+			<el-image style="width:560px;height:400px;border:1px solid #cdcdcd" fit="scale-down" src="//asset.ibanquan.com/image/5eb5e35b6da86b000b7603e5/s.png?v=1588978523"></el-image>
 			<div class="shipment-des-sub">
+				<div class="shipment-des-content-title">计费方式为：<strong>按重量</strong></div>
 				<div>
-					1、如果选择计费方式为：<strong>按重量</strong><br/>
-					计费数量的单位为 <strong>公斤</strong><br/>
-					例如：<br/>
-					第一计费数量：5，第一计费价格：2<br/>
-					第二计费数量：1，第二计费价格：3<br/>
-					以上示例为：<br/>
-					首5公斤的价格为2元，续重1公斤的价格为3元<br/>
+					计量单位为公斤，第一计费数量为首重包含多少公斤，第一计费价格为首重的价格多少元，第二计费数量为续重的重量，第二计费价格为每单位下续重的价格
 				</div>
+				<div class="shipment-example">
+					例如：第一计费数量为<strong>5</strong>，第一计费价格为<strong>2</strong>，第二计费数量为<strong>1</strong>，第二计费价格为<strong>3</strong>，
+				</div>
+				<div class="shipment-example">
+					相当于：前5公斤的运费为2元，超出5公斤的部分每1公斤的运费为3元
+				</div>
+			</div>
+			<div class="shipment-des-sub" style="margin-top:20px;">
+				<div class="shipment-des-content-title">计费方式为：<strong>按件数</strong></div>
 				<div>
-					2、如果选择计费方式为：<strong>按件数</strong><br/>
-					计费数量的单位为 <strong>件</strong><br/>
-					例如：<br/>
-					第一计费数量：5，第一计费价格：2<br/>
-					第二计费数量：1，第二计费价格：3<br/>
-					以上示例为：<br/>
-					首5件的价格为2元，续件1件的价格为3元<br/>
+					计量单位为件，第一计费数量为前多少件，第一计费价格为前几件的价格多少元，第二计费数量为后续每多少件计算价格，第二计费价格为每单位下商品件数的价格
+				</div>
+				<div class="shipment-example">
+					例如：第一计费数量为<strong>5</strong>，第一计费价格为<strong>2</strong>，第二计费数量为<strong>1</strong>，第二计费价格为<strong>3</strong>，
+				</div>
+				<div class="shipment-example">
+					相当于：前5件的运费为2元，超出5件的部分每件的运费为3元
 				</div>
 			</div>
 		</div>
@@ -246,16 +251,30 @@ export default {
 	margin-bottom: 20px;
 }
 .shipment-des-sub-title {
-	font-size: $middle-font-size;
-	color: $sub-font-color;
+	font-size: $large-font-size;
+	color: $main-font-color;
 	margin-bottom: 10px;
+	padding-bottom:10px;
+	border-bottom:1px solid $line-color;
 }
 .shipment-des-sub>div {
 	font-size: $middle-font-size;
-	color:$sub-font-color;
-	margin-bottom: 20px;
 }
 .dialog-edit .el-input {
 	width: 250px
+}
+.shipment-des-content-title{
+	font-size:$middle-font-size;
+	line-height:40px;
+}
+.shipment-example{
+	color:$error-color;
+	margin-top:10px;
+}
+</style>
+<style lang="scss">
+@import '@/assets/style/base.scss';
+.el-table tr.table-header-row th{
+	background-color:$background-color;
 }
 </style>
