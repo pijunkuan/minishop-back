@@ -45,7 +45,7 @@ export default {
                     backgroundColor: 'rgba(255,255,255,1)',
                     padding: [5, 10],
                     textStyle: {
-                        color: '#7588E4',
+                        color: '#409EFF',
                     },
                     extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
                 },
@@ -85,7 +85,7 @@ export default {
                 yAxis: {
                     type: 'value',
                     splitLine: {
-                        show:true,
+                        show:false,
                     },
                     axisTick: {
                         show: false
@@ -131,10 +131,10 @@ export default {
                         normal: {
                             color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                                 offset: 0,
-                                color: 'rgba(64,158,255,0.5)'
+                                color: 'rgba(64,158,255,0.2)'
                             }, {
                                 offset: 1,
-                                color: 'rgba(64,158,255,0.1)'
+                                color: 'rgba(64,158,255,0.05)'
                             }], false)
                         }
                     },
@@ -145,7 +145,7 @@ export default {
                     },
                     lineStyle: {
                         normal: {
-                            width: 3
+                            width: 4
                         }
                     }
                 },]

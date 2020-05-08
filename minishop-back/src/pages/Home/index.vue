@@ -34,6 +34,14 @@
 			</div>
 		</div>
 		<div class="dashboard-2">
+			<div class="order-line">
+				<div class="dashboard-title">
+					<strong>实时概况</strong>
+				</div>
+				<div>
+					<muti-line id="orderLineCircle" className="orderLineCircleClass" :Show="lineShow" :Height="300" :Values = "order_line"></muti-line>
+				</div>
+			</div>
 			<div class="image-info">
 				<div class="dashboard-title">
 					<strong>图片空间</strong>
@@ -55,19 +63,12 @@
 					</div>
 				</div>
 			</div>
-			<div class="order-line">
-				<div class="dashboard-title">
-					<strong>实时概况</strong>
-				</div>
-				<div>
-					<muti-line id="orderLineCircle" className="orderLineCircleClass" :Show="lineShow" :Height="300" :Values = "order_line"></muti-line>
-				</div>
-			</div>
+			
 		</div>
 	</div>
 	<div class="ad-contain">
 		<div class="dashboard-title">
-			<strong>技术服务</strong>
+			<strong>技术服务</strong> <span class="data-card-title-3">此栏可去除</span>
 		</div>
 		<div style="text-align: center;">
 			<el-image 
@@ -202,19 +203,20 @@ export default {
 	display: inline-block;
 	width : 80%;
 	vertical-align: top;
+	margin-right: 10px;
 }
 .ad-contain {
 	display: inline-block;
-	width: 16%;
+	width: calc(20% - 22px);
 	height:550px;
 	vertical-align: top;
 	padding:5px;
 	border: 1px solid $line-color;
 }
 .dashboard-1 {
-	margin-top: 10px;
-	width: 95%;
+	width: 100%;
 	height: 200px;
+	border:1px solid $line-color;
 }
 .dashboard-title{
 	height:30px;
@@ -225,8 +227,9 @@ export default {
 	font-size: $large-font-size;
 }
 .data-card-title-1{
-	font-size: $large-font-size;
-	color:$main-font-color;
+	font-size: 20px;
+	font-weight: 600;
+	color:$main-color;
 	margin-bottom: 8px;
 }
 .data-card-title-2{
@@ -255,23 +258,28 @@ export default {
 	font-size: $large-font-size;
 	vertical-align: top;
 }
+.dashboard-2 {
+	margin-top: 20px;
+}
 .dashboard-2>div {
 	display: inline-block;
-	width: 100%;
 }
-
+.dashboard-2>div:first-child{
+	margin-right: 15px;
+}
 .dashboard-2 .image-info {
 	width: 30%;
-	height:300px;
-	margin-right:15px;
+	height:100%;
 	padding:10px;
 	vertical-align: top;
+	border:1px solid $line-color;
 }
 
 .dashboard-2 .order-line {
-	width: 60%;
-	height:300px;
+	width: calc(70% - 59px);
+	height:100%;
 	padding: 10px;
 	vertical-align: top;
+	border:1px solid $line-color;
 }
 </style>
