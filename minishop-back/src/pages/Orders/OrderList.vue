@@ -141,7 +141,7 @@
 				this.getData()
 			},
 			reset(){
-				this.query.status = []
+				this.query.status = ''
 				this.query.page = 1
 				this.query.value = ''
 				this.query.type = ''
@@ -152,6 +152,9 @@
 			}
 		},
 		created(){
+			if(this.$route.query.status){
+				this.query.status  = this.$route.query.status
+			}
 			this.getData()
 		}
 	}
