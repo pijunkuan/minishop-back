@@ -87,7 +87,7 @@
 			<p>系统搭建，企业定制，OEM等</p>
 		</div>
 		<el-divider></el-divider>
-		<div class="data-card-title-3" style="text-align: right;">
+		<div class="data-card-title-3">
 			<strong>重庆美智科技发展有限公司</strong>
 		</div>
 	</div>
