@@ -9,7 +9,7 @@
 				<div>
 					<div class="data-card-title-1"><strong style="color:#E6A23C">{{order.processing_count}}</strong></div>
 					<div class="data-card-title-2">待配送订单</div>
-					<div class="data-card-title-3"><span style="color:#409EFF;cursor: pointer;">查看</span></div>
+					<div class="data-card-title-3"><span style="color:#409EFF;cursor: pointer;" @click="toOrder('processing')">查看</span></div>
 				</div>
 				<div>
 					<div class="data-card-title-1">¥ {{order.day_new_order_suc_amount}}</div>
@@ -29,34 +29,81 @@
 				<div>
 					<div class="data-card-title-1">{{order.refunding_count}}</div>
 					<div class="data-card-title-2">退款中</div>
-					<div class="data-card-title-3"><span style="color:#409EFF;cursor: pointer;">查看</span></div>
+					<div class="data-card-title-3"><span style="color:#409EFF;cursor: pointer;" @click="toOrder('refunding')">查看</span></div>
 				</div>
 			</div>
 		</div>
 		<div class="dashboard-2">
-			<div class="image-info">
-				<div class="dashboard-title">
-					<strong>图片空间资源</strong>
-				</div>
-				图片资源，占位
-			</div>
 			<div class="order-line">
 				<div class="dashboard-title">
-					<strong>实时订单金额</strong>
+					<strong>实时概况</strong>
 				</div>
-				订单曲线图，占位
+				<div>
+					<muti-line id="orderLineCircle" className="orderLineCircleClass" :Show="lineShow" :Height="300" :Values = "order_line"></muti-line>
+				</div>
 			</div>
+			<div class="image-info">
+				<div class="dashboard-title">
+					<strong>图片空间</strong>
+				</div>
+				<div style="padding-left:20px">
+					<div>
+						<water-liquid id="ImageCircle" className="ImageCircleClass" :Show="waterShow" :Height="200" :Value="image.bytes_percent"></water-liquid>
+					</div>
+					<div style="padding-left: 10px">
+						<div class="data-card-title-3">
+							已使用：{{image.bytes_value}}
+						</div>
+						<div class="data-card-title-3">
+							总大小：1 GB
+						</div>
+						<div class="data-card-title-3">
+							图片数量：{{image.count}}
+						</div>
+					</div>
+				</div>
+			</div>
+			
 		</div>
 	</div>
 	<div class="ad-contain">
-		广告占位
+		<div class="dashboard-title">
+			<strong>技术服务</strong> <span class="data-card-title-3">此栏可去除</span>
+		</div>
+		<div style="text-align: center;">
+			<el-image 
+				style="width: 90%;"
+				src="//asset.ibanquan.com/image/5eb56cd636a6ce000bf4223b/s.jpeg?v=1588948183" 
+				:preview-src-list="['//asset.ibanquan.com/image/5eb56cd636a6ce000bf4223b/s.jpeg?v=1588948183']"
+				fit="contain">
+
+			</el-image>
+		</div>
+		<div class="data-card-title-3">
+			<p style="text-align: center;">微信扫一扫，加我咨询</p>
+			<p><strong>咨询时间：</strong></p>
+			<p>周一至周五</p>
+			<p>15:00 - 20:00</p>
+			<p><strong>业务范围：</strong></p>
+			<p>系统搭建，企业定制，OEM等</p>
+		</div>
+		<el-divider></el-divider>
+		<div class="data-card-title-3">
+			<strong>重庆美智科技发展有限公司</strong>
+		</div>
 	</div>
 </div>
 </template>
 
 <script>
 import { get_static_data } from "@/api/dashboard.js"
+import  WaterLiquid  from "@/components/Echarts/WaterLiquid"
+import  MutiLine  from "@/components/Echarts/MutiLine"
 export default {
+	components:{
+		WaterLiquid,
+		MutiLine
+	},
 	data(){
 		return {
 			order:{
@@ -77,15 +124,21 @@ export default {
 			image:{
 				bytes:0,
 				bytes_value:"",
-				count:0
+				count:0,
+				bytes_percent:0
 			},
 			order_line:{
 				today:[],
 				yesterday:[]
-			}
+			},
+			waterShow:false,
+			lineShow:false,
 		}
 	},
 	methods:{
+		toOrder(status){
+			this.$router.push({name:"OrderList",query:{status:status}})
+		},
 		getOrder(){
 			get_static_data("order").then(r=>{
 				let _data = r.data.body
@@ -117,8 +170,10 @@ export default {
 				this.image = {
 					bytes:_data.bytes * 1.00,
 					bytes_value:_data.bytes_value,
-					count:_data.count * 1.00
+					count:_data.count * 1.00,
+					bytes_percent:_data.bytes_percent * 1.00
 				}
+				this.waterShow = true
 			})
 		},
 		getOrderLine(){
@@ -128,6 +183,7 @@ export default {
 					today:_data.today,
 					yesterday:_data.yesterday
 				}
+				this.lineShow = true
 			})
 		}
 	},
@@ -147,19 +203,20 @@ export default {
 	display: inline-block;
 	width : 80%;
 	vertical-align: top;
+	margin-right: 10px;
 }
 .ad-contain {
 	display: inline-block;
-	width: 16%;
+	width: calc(20% - 22px);
 	height:550px;
 	vertical-align: top;
 	padding:5px;
 	border: 1px solid $line-color;
 }
 .dashboard-1 {
-	margin-top: 10px;
-	width: 95%;
+	width: 100%;
 	height: 200px;
+	border:1px solid $line-color;
 }
 .dashboard-title{
 	height:30px;
@@ -170,8 +227,9 @@ export default {
 	font-size: $large-font-size;
 }
 .data-card-title-1{
-	font-size: $large-font-size;
-	color:$main-font-color;
+	font-size: 20px;
+	font-weight: 600;
+	color:$main-color;
 	margin-bottom: 8px;
 }
 .data-card-title-2{
@@ -200,23 +258,28 @@ export default {
 	font-size: $large-font-size;
 	vertical-align: top;
 }
+.dashboard-2 {
+	margin-top: 20px;
+}
 .dashboard-2>div {
 	display: inline-block;
-	width: 100%;
 }
-
+.dashboard-2>div:first-child{
+	margin-right: 15px;
+}
 .dashboard-2 .image-info {
 	width: 30%;
-	height:300px;
-	margin-right:15px;
+	height:100%;
 	padding:10px;
 	vertical-align: top;
+	border:1px solid $line-color;
 }
 
 .dashboard-2 .order-line {
-	width: 60%;
-	height:300px;
+	width: calc(70% - 59px);
+	height:100%;
 	padding: 10px;
 	vertical-align: top;
+	border:1px solid $line-color;
 }
 </style>
