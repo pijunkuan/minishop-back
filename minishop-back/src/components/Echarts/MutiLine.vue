@@ -110,12 +110,12 @@ export default {
                     data: this.Values.yesterday,
                     itemStyle: {
                         normal: {
-                            color: '#999999'
+                            color: 'rgba(64,158,255,0.4)'
                         }
                     },
                     lineStyle: {
                         normal: {
-                            width: 3
+                            width: 2.5
                         }
                     }
                 },
@@ -140,12 +140,12 @@ export default {
                     },
                     itemStyle: {
                         normal: {
-                            color: '#409EFF'
+                            color: 'rgba(64,158,255,1)'
                         }
                     },
                     lineStyle: {
                         normal: {
-                            width: 4
+                            width: 2.5
                         }
                     }
                 },]

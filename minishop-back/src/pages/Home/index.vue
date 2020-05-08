@@ -9,27 +9,36 @@
 				<div>
 					<div class="data-card-title-1"><strong style="color:#E6A23C">{{order.processing_count}}</strong></div>
 					<div class="data-card-title-2">待配送订单</div>
-					<div class="data-card-title-3"><span style="color:#409EFF;cursor: pointer;" @click="toOrder('processing')">查看</span></div>
+					<div class="data-card-title-3" style="height:34px"><span style="color:#409EFF;cursor: pointer;" @click="toOrder('processing')">查看</span></div>
 				</div>
 				<div>
 					<div class="data-card-title-1">¥ {{order.day_new_order_suc_amount}}</div>
 					<div class="data-card-title-2">今日总金额</div>
-					<div class="data-card-title-3">昨日订单金额: <strong>{{order.yesterday_order_suc_amount}}</strong></div>
+					<div class="data-card-title-3">
+						<div>昨日订单金额: </div>
+						<div><strong>{{order.yesterday_order_suc_amount}}</strong></div>
+					</div>
 				</div>
 				<div>
 					<div class="data-card-title-1">{{order.day_new_order_count}}</div>
 					<div class="data-card-title-2">今日订单数</div>
-					<div class="data-card-title-3">昨日订单数: <strong>{{order.yesterday_order_count}}</strong></div>
+					<div class="data-card-title-3">
+						<div>昨日订单数: </div>
+						<div><strong>{{order.yesterday_order_count}}</strong></div>
+					</div>
 				</div>
 				<div>
 					<div class="data-card-title-1">{{customer.today_customer_count}}</div>
-					<div class="data-card-title-2">今日新增顾客</div>
-					<div class="data-card-title-3">昨日增加顾客: <strong>{{customer.yesterday_customer_count}}</strong></div>
+					<div class="data-card-title-2">今日新顾客</div>
+					<div class="data-card-title-3">
+						<div>昨日增加顾客: </div>
+						<div><strong>{{customer.yesterday_customer_count}}</strong></div>
+					</div>
 				</div>
 				<div>
 					<div class="data-card-title-1">{{order.refunding_count}}</div>
 					<div class="data-card-title-2">退款中</div>
-					<div class="data-card-title-3"><span style="color:#409EFF;cursor: pointer;" @click="toOrder('refunding')">查看</span></div>
+					<div class="data-card-title-3" style="height:34px"><span style="color:#409EFF;cursor: pointer;" @click="toOrder('refunding')">查看</span></div>
 				</div>
 			</div>
 		</div>
@@ -50,7 +59,7 @@
 					<div>
 						<water-liquid id="ImageCircle" className="ImageCircleClass" :Show="waterShow" :Height="200" :Value="image.bytes_percent"></water-liquid>
 					</div>
-					<div style="padding-left: 10px">
+					<div style="padding:0 0 48px 10px">
 						<div class="data-card-title-3">
 							已使用：{{image.bytes_value}}
 						</div>
@@ -68,7 +77,7 @@
 	</div>
 	<div class="ad-contain">
 		<div class="dashboard-title">
-			<strong>技术服务</strong> <span class="data-card-title-3">此栏可去除</span>
+			<strong>技术服务</strong>
 		</div>
 		<div style="text-align: center;">
 			<el-image 
@@ -89,6 +98,7 @@
 		</div>
 		<el-divider></el-divider>
 		<div class="data-card-title-3">
+			<div style="margin-bottom:30px"><span class="data-card-title-3">此栏可去除</span></div>
 			<strong>重庆美智科技发展有限公司</strong>
 		</div>
 	</div>
@@ -208,7 +218,7 @@ export default {
 .ad-contain {
 	display: inline-block;
 	width: calc(20% - 22px);
-	height:550px;
+	height:587px;
 	vertical-align: top;
 	padding:5px;
 	border: 1px solid $line-color;
@@ -265,7 +275,7 @@ export default {
 	display: inline-block;
 }
 .dashboard-2>div:first-child{
-	margin-right: 15px;
+	margin-right: 8px;
 }
 .dashboard-2 .image-info {
 	width: 30%;
@@ -276,7 +286,7 @@ export default {
 }
 
 .dashboard-2 .order-line {
-	width: calc(70% - 59px);
+	width: calc(70% - 52px);
 	height:100%;
 	padding: 10px;
 	vertical-align: top;
