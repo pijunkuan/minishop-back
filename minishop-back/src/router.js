@@ -73,6 +73,7 @@ export const allRoutes = [
 		children:[
 			{ path:'theme', name:'SetTheme', component: r => require(['./pages/Setting/SetTheme.vue'],r), meta:{ title:'主题设置', icon:'icontupian1' }, hidden:false },
 			{ path:'shipment', name:'SetShip', component: r => require(['./pages/Setting/SetShip.vue'],r), meta:{ title:'物流设置', icon:'icontupian1' }, hidden:false },
+			{ path:'category', name:'SetCategory', component: r => require(['./pages/Setting/SetCategory.vue'],r), meta:{ title:'分类设置', icon:'icontupian1' }, hidden:false },
 		]
 	},
 	{
